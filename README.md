@@ -12,7 +12,7 @@ A simple forum.
 
 ## Technologies
 * React
-* Jave (Spring)
+* Java (Spring)
 
 ## Functionality
 ### For everyone
