@@ -1,5 +1,9 @@
 # Yet Another Dead Forum
 
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/rakenduste-programmeerimine-2021/yet-another-dead-forum.svg)](https://github.com/rakenduste-programmeerimine-2021/yet-another-dead-forum/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/rakenduste-programmeerimine-2021/yet-another-dead-forum.svg)](https://github.com/rakenduste-programmeerimine-2021/yet-another-dead-forum/pulls)
+
 ## Authors:
 * Marilii Saar
 * Markus Tammeoja
