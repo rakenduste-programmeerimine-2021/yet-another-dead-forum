@@ -1,20 +1,25 @@
 # Yet Another Dead Forum
 
-## Authors:
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/rakenduste-programmeerimine-2021/yet-another-dead-forum.svg)](https://github.com/rakenduste-programmeerimine-2021/yet-another-dead-forum/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/rakenduste-programmeerimine-2021/yet-another-dead-forum.svg)](https://github.com/rakenduste-programmeerimine-2021/yet-another-dead-forum/pulls)
+
+## ☕ Authors:
 * Marilii Saar
 * Markus Tammeoja
 
-## Idea:
+## 💡 Idea:
 A simple forum.
 
-## Wireframe
+## 🎨 Wireframe
 [Wireframe](https://lucid.app/lucidchart/d2b2d9c6-6dbd-4ebd-8750-2ed59556a80b/edit?viewport_loc=927%2C-111%2C1664%2C791%2C0_0&invitationId=inv_2093a20f-be4d-4a9e-811f-ef1ee4aaaaf2 "Initial wireframe")
 
-## Technologies
+## 🪄 Technologies
 * React
 * Java (Spring)
+* PostgreSQL
 
-## Functionality
+## 📄 Functionality
 ### For everyone
 * Registration
 * Logging in
