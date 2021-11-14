@@ -19,6 +19,38 @@ A simple forum.
 * Java (Spring)
 * PostgreSQL
 
+## Development
+
+### **Backend**
+Make sure you have:
+* Maven 
+* Postgres (and pgAdmin)
+* Java 11
+
+Inside of `backend`'s root folder, open a CLI and enter the following:
+
+```
+./mvnw spring-boot:run
+```
+
+Alternatively, you can start it via your editor of choice, eg IntelliJ IDEA
+
+
+### **Frontend**
+
+Make sure you have:
+* Node
+
+Inside of `frontend`'s root folder, open a CLI and enter the following:
+
+```
+npm install         // installs the required dependencies (run once)
+```
+
+```
+npm start
+```
+
 ## 📄 Functionality
 ### For everyone
 * Registration
