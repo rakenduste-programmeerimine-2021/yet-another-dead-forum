@@ -5,15 +5,21 @@ import ee.tlu.forum.model.User;
 import ee.tlu.forum.repository.RoleRepository;
 import ee.tlu.forum.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Transactional
 @Slf4j
 @Service
-public class UserService implements UserServiceInterface {
+public class UserService implements UserServiceInterface, UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -21,6 +27,24 @@ public class UserService implements UserServiceInterface {
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+           log.error("User {} not found", username);
+           throw new UsernameNotFoundException("User " + username + " not found");
+        } else {
+            log.info("User {} found in the database", username);
+        }
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
+
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        // return spring security's User class location to not mix up with the forum's own User class.
     }
 
     @Override
@@ -46,6 +70,11 @@ public class UserService implements UserServiceInterface {
     public List<User> getUsers() {
         log.info("Fetching all users");
         return userRepository.findAll();
+    }
+
+    public List<Role> getRoles() {
+        log.info("Fetching all roles");
+        return roleRepository.findAll();
     }
 
     @Override
