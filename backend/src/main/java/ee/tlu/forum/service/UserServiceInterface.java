@@ -5,7 +5,7 @@ import ee.tlu.forum.model.User;
 
 import java.util.List;
 
-public interface UserServiceInterface {
+public interface UserServiceInterface{
     User saveUser(User user);
     Role saveRole(Role role);
     void addRoleToUser(String username, String roleName);
