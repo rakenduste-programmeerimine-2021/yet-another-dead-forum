@@ -18,6 +18,7 @@ public class Thread extends BaseEntity {
     @Id
     private Long id;
     private String text;
+    private String title;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
