@@ -2,6 +2,7 @@ package ee.tlu.forum.controller;
 
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +18,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
-    public List<User> getUsers() {
-        return userService.getUsers();
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.getUserById(id));
     }
 }
