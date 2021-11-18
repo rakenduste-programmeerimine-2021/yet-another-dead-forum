@@ -25,11 +25,18 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @PostMapping("/user/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
+    @PostMapping("/user/create")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         // ServletUriComponentsBuilder.fromCurrentContextPath() - returns current link up to the port (8080)
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+        userService.saveUser(user);
+        userService.addRoleToUser(user.getUsername(), "ROLE_USER");
+        return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping("/user/save")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        return ResponseEntity.ok().body(userService.saveUser(user));
     }
 
     @GetMapping("/user/{id}")
