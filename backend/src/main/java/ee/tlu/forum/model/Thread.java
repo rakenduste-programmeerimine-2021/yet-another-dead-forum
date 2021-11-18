@@ -1,5 +1,6 @@
 package ee.tlu.forum.model;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,10 @@ public class Thread extends BaseEntity {
     @Id
     private Long id;
 
+    @NotNull
     private String text;
 
+    @NotNull
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

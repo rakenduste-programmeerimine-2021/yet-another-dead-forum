@@ -1,5 +1,6 @@
 package ee.tlu.forum.model;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +22,14 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(unique = true)
     private String username;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

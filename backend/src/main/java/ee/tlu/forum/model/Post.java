@@ -1,5 +1,6 @@
 package ee.tlu.forum.model;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,8 @@ public class Post extends BaseEntity {
 
     @Id
     private Long id;
+
+    @NotNull
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
