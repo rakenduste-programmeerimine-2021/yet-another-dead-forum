@@ -3,6 +3,7 @@ package ee.tlu.forum.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,12 +37,24 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        // first requests the actual given parameters
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+
+        // first requests the actual given parameters (Now in Json, wee!)
+        ObjectMapper mapper = new ObjectMapper();
+        UsernamePasswordForm loginInfo = new UsernamePasswordForm();
+
+        try {
+            loginInfo = mapper.readValue(request.getInputStream(), UsernamePasswordForm.class);
+        } catch(IOException e) {
+            log.error("Something went wrong! " + e);
+        }
+
+        String username = loginInfo.getUsername();
+        String password = loginInfo.getPassword();
         log.info("Authentication attempt, Username: {}, Password: {}", username, password);
+
         // then create an authentication token with the provided parameters
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+
         // then authenticationManager attempts to authenticate. If successful, calls successfulAuthentication method.
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -80,4 +93,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
+}
+
+@Data
+class UsernamePasswordForm {
+    private String username;
+    private String password;
 }
