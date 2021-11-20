@@ -19,7 +19,7 @@ A simple forum.
 * Java (Spring)
 * PostgreSQL
 
-## Development
+## 🛠 Development
 
 ### **Backend**
 Make sure you have:
