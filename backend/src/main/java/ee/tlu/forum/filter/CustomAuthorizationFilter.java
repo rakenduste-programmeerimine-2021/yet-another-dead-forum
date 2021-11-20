@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -50,22 +49,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     });
 
                     UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(username, authorities);
+                            new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
                     filterChain.doFilter(request, response);
-                    log.info("User " + username + " logged in!");
-                } catch (NullPointerException e) {
-//                    log.error("Error - User has no roles");
-//                    response.setStatus(HttpStatus.FORBIDDEN.value());
-//                    Map<String, String> error = new HashMap<>();
-//                    error.put("error_message", "Error - User has no roles");
-//                    response.setContentType(APPLICATION_JSON_VALUE);
-//                    new ObjectMapper().writeValue(response.getOutputStream(), error);
-                    e.printStackTrace();
+                    log.info("User " + username + " accessed endpoint " + request.getServletPath());
                 } catch (Exception e) {
-                    log.error("Error logging in: {}", e.getMessage());
-                    e.printStackTrace();
+                    log.error("Error accessing endpoint {}: {}", request.getServletPath(), e.getMessage());
                     response.setHeader("error", e.getMessage());
                     response.setStatus(HttpStatus.FORBIDDEN.value());
                     Map<String, String> error = new HashMap<>();

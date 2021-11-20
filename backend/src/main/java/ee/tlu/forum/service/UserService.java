@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -53,8 +52,8 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public User saveUser(User user) {
-        log.info("Saving new user - " + user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info("Saving new user - " + user.getUsername());
         return userRepository.save(user);
     }
 
@@ -69,6 +68,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         log.info("Adding role {} to user {}", roleName, username);
         User user = userRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
+        log.info(role.toString());
         user.getRoles().add(role);
     }
     @Override
@@ -92,5 +92,14 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     public User getUserByUsername(String username) {
         log.info("Fetching user with username {}", username);
         return userRepository.findByUsername(username);
+    }
+
+    public User getUserByEmail(String email) {
+        log.info("Fetching user with email {}", email);
+        return userRepository.findByEmail(email);
+    }
+
+    public Role getRoleByName(String name) {
+        return roleRepository.findByName(name);
     }
 }

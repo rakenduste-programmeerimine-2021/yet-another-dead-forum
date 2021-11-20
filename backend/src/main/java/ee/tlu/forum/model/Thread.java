@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -30,5 +30,5 @@ public class Thread extends BaseEntity {
     private User author;
 
     @OneToMany(mappedBy = "thread", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Post> post;
+    private Collection<Post> post;
 }
