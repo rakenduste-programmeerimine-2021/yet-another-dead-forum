@@ -17,6 +17,7 @@ import java.util.Collection;
 public class Thread extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
