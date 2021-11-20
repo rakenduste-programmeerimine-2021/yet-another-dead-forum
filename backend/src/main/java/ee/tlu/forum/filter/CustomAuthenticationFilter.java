@@ -69,12 +69,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm algorithm = Algorithm.HMAC256("secretmwahahaWahahahahHWhaaaaa".getBytes(StandardCharsets.UTF_8));
         String accessToken = JWT.create()
                 .withSubject(user.getUsername()) // needs a string that's unique to the user so it can identify the user by the specific token
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // expires in 10 minutes
+                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // expires in 60 minutes
                 .withIssuer(request.getRequestURL().toString()) // author of token, eg url of app
                 .withClaim("roles", user.getAuthorities() // pass in all the roles of the user
                         .stream() // map with stream API
                         .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.joining()))
+                        .collect(Collectors.toList()))
                 .sign(algorithm); // sign it with the selected algorithm and secret
 
         String refreshToken = JWT.create()
@@ -82,9 +82,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // expires in one hour
                 .withIssuer(request.getRequestURL().toString()) // author of token, eg url of app
                 .sign(algorithm); // sign it with the selected algorithm and secret
-
-//        response.setHeader("access_token", accessToken);
-//        response.setHeader("refresh_token", refreshToken);
 
         // Parse the tokens as json
         Map<String, String> tokens = new HashMap<>();
