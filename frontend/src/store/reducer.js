@@ -1,13 +1,27 @@
-import { USER_REGISTER } from './actions';
+import { USER_CREATE, USER_LOGIN, USER_LOGOUT } from './actions';
 
 const authReducer = (state, action) => {
   switch(action.type) {
-    case USER_REGISTER:
+    case USER_CREATE:
       return {
         ...state,
         token: action.payload.token,
         user: action.payload.user,
       }
+    case USER_LOGIN:
+      return {
+        ...state,
+        token: action.payload.token,
+        user: action.payload.user
+      }
+    case USER_LOGOUT:
+      return {
+        ...state,
+        token: null,
+        user: null
+      }
+    default:
+      return state
   }
 };
 
