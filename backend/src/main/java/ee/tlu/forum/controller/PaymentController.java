@@ -25,8 +25,8 @@ public class PaymentController {
 
     @PostMapping("/payment")
     public ResponseEntity<EverypayLink> makePayment(@RequestBody DonationInput donation) {
-        Donation savedDonation = donationService.saveDonation(donation);
-        EverypayLink everypayLink = paymentService.makePayment(savedDonation);
+//        Donation savedDonation = donationService.saveDonation(donation);
+        EverypayLink everypayLink = paymentService.makePayment(donation);
         if (everypayLink == null) {
             log.info("Sending empty result to frontend");
             return ResponseEntity.badRequest().body(null);

@@ -33,6 +33,8 @@ public class DonationService implements DonationServiceInterface {
         Donation donation = new Donation();
         donation.setAmount(donationInput.getAmount());
         donation.setUser(user.get());
-        return donationRepository.save(donation);
+        Donation d = donationRepository.save(donation);
+        log.info(d.getAmount() + " " + d.getId() + " " + d.getUser().toString());
+        return d;
     }
 }

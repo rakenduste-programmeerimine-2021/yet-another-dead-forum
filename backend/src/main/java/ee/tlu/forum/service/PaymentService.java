@@ -1,11 +1,16 @@
 package ee.tlu.forum.service;
 
+import ee.tlu.forum.exception.NotFoundException;
 import ee.tlu.forum.model.Donation;
+import ee.tlu.forum.model.User;
+import ee.tlu.forum.model.input.DonationInput;
 import ee.tlu.forum.model.input.EverypayResponse;
 import ee.tlu.forum.model.output.EverypayData;
 import ee.tlu.forum.model.output.EverypayLink;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import ee.tlu.forum.repository.DonationRepository;
+import ee.tlu.forum.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,16 +22,16 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.transaction.Transactional;
 import javax.xml.bind.DatatypeConverter;
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
 
-@Log4j2
+@Slf4j
+@Transactional
 @Service
-public class PaymentService {
+public class PaymentService implements PaymentServiceInterface {
     @Value("${everypay.url}")
     private String url;
 
@@ -48,15 +53,24 @@ public class PaymentService {
     @Value("${everypay.nonceKey}")
     private String nonceKey;
 
-    @Autowired
     RestTemplate restTemplate;
+    DonationService donationService;
 
-    public EverypayLink makePayment(Donation donation) {
-        log.info("Started everypay payment");
+    public PaymentService(RestTemplate restTemplate, DonationService donationService) {
+        this.restTemplate = restTemplate;
+        this.donationService = donationService;
+    }
 
+    public EverypayLink makePayment(DonationInput donationInput) {
 
+        log.info(donationInput.getUsername() + " AAA " + donationInput.getAmount());
+
+        Donation donation = donationService.saveDonation(donationInput);
+
+        log.info("Started everypay payment for {}. Amount: {}",
+                donationInput.getUsername(),
+                donationInput.getAmount());
         ZonedDateTime timestamp = ZonedDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
-
         Long orderId = donation.getId();
 
         EverypayData data = new EverypayData();
