@@ -17,8 +17,6 @@ const Login = () => {
       password: password
     }
 
-    console.log(userData)
-
     const res = await fetch('http://localhost:8080/api/login', {
       method: 'POST',
       headers: {
@@ -30,7 +28,6 @@ const Login = () => {
     const returnData = await res.json()
 
     if(returnData.access_token) {
-      console.log("Successfully logged in")
       dispatch(loginUser(returnData))
     } else {
       let errors = ''
@@ -92,6 +89,11 @@ const Login = () => {
 
           </Form>
         </>
+      )
+    }
+    { state.auth.token &&
+      (
+        <Title style={{textAlign: 'center'}}>You're already logged in</Title>
       )
     }
   </>

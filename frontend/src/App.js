@@ -12,9 +12,7 @@ function App() {
     <BrowserRouter>
       <Layout className="layout" style={{height: '100%'}}>
         <Header>
-          <Routes>
-            <Route path="/" element={<PageHeader />} />
-          </Routes>
+          <PageHeader />
         </Header>
         <Content style={{padding: '50px'}}>
           <div style={{background: '#fff', height: '100%', padding: '20px'}}>

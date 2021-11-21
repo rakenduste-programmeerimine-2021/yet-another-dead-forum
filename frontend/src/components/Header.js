@@ -5,11 +5,11 @@ import { Context } from '../store';
 import { logoutUser } from '../store/actions';
 
 const Header = () => {
-  const [current, setCurrent] = useState(window.location.pathname.replace('/', ''))
+  const [current, setCurrent] = useState(window.location.pathname.replace('/', ''));
   const [state, dispatch] = useContext(Context);
 
   const handleLogout = () => {
-    dispatch(logoutUser)
+    dispatch(logoutUser());
   }
 
   return (
@@ -20,8 +20,8 @@ const Header = () => {
       </Menu.Item>
       {state.auth.token &&
         (
-          <Menu.Item key={'logout'} onClick={e => setCurrent(e.key)}>
-            <Link to="#" onClick={handleLogout}>Logout</Link>
+          <Menu.Item key={'logout'} onClick={handleLogout}>
+            <Link to="#">Logout</Link>
           </Menu.Item>
         )
       }

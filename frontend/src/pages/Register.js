@@ -6,13 +6,13 @@ function Register() {
 
   const handleSubmit = async (values) => {
     const user = {
-      userName: values.userName,
+      username: values.userName,
       email: values.email,
       password: values.password
     }
 
     if (!values.userName || !values.email || !values.password || !values.confirm) {
-      setError('Please fill out all fields')
+      setError('Please fill out all of the fields')
     } else if (values.password !== values.confirm) {
       setError('Passwords do not match!')
     } else {
