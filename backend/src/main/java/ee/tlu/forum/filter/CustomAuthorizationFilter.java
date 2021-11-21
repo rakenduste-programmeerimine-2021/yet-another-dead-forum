@@ -52,8 +52,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-                    filterChain.doFilter(request, response);
                     log.info("User " + username + " accessed endpoint " + request.getServletPath());
+                    filterChain.doFilter(request, response);
                 } catch (Exception e) {
                     log.error("Error accessing endpoint {}: {}", request.getServletPath(), e.getMessage());
                     response.setHeader("error", e.getMessage());

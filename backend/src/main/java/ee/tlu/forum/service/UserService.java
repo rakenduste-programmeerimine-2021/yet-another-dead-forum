@@ -1,5 +1,8 @@
 package ee.tlu.forum.service;
 
+import ee.tlu.forum.exception.AlreadyExistsException;
+import ee.tlu.forum.exception.BadRequestException;
+import ee.tlu.forum.exception.NotFoundException;
 import ee.tlu.forum.model.Role;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.repository.RoleRepository;
@@ -16,6 +19,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Slf4j
@@ -34,41 +38,89 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
            log.error("User {} not found", username);
            throw new UsernameNotFoundException("User " + username + " not found");
         } else {
             log.info("User {} found in the database", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role -> {
+        user.get().getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), authorities);
         // return spring security's User class location to not mix up with the forum's own User class.
     }
 
     @Override
-    public User saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User editUser(User user) {
+        if (user.getId() == null) {
+            throw new BadRequestException("You must specify an ID for the user");
+        }
+        if (userRepository.findById(user.getId()).isEmpty()) {
+            throw new NotFoundException("The user with id: " + user.getId() + " does not exist");
+        }
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new AlreadyExistsException("Username " + user.getUsername() + " is already taken");
+        }
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new AlreadyExistsException("E-mail " + user.getEmail() + " is already in use");
+        }
         log.info("Saving new user - " + user.getUsername());
         return userRepository.save(user);
     }
 
     @Override
+    public User registerUser(User user) {
+        if (user.getUsername() == null || user.getUsername().length() < 2) {
+            throw new BadRequestException("Username must be at least 3 characters long.");
+        }
+        if (user.getEmail() == null) {
+            throw new BadRequestException("E-mail cannot be empty.");
+        }
+        if (user.getPassword() == null || user.getPassword().length() < 6) {
+            throw new BadRequestException("Password must be at least 6 characters long.");
+        }
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new AlreadyExistsException("Username " + user.getUsername() + " is already taken.");
+        }
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new AlreadyExistsException("E-mail " + user.getEmail() + " is already in use.");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info("Saving new user - " + user.getUsername());
+        Role role = roleRepository.findByName("ROLE_USER").get();
+        log.info("ROLE {}", role.getName());
+        User newUser = userRepository.save(user);
+        log.info("USER {} - ROLES {}", newUser.getUsername(), newUser.getRoles());
+        log.info("NEW USER ROLES");
+        newUser.getRoles().add(role);
+        return newUser;
+    }
+
+
+
+    @Override
     public Role saveRole(Role role) {
         log.info("Saving new role - " + role.getName());
+        if (roleRepository.findByName(role.getName()).isPresent()) {
+            throw new AlreadyExistsException("A role with the name " + role.getName() + " already exists.");
+        }
         return roleRepository.save(role);
     }
 
     @Override
     public void addRoleToUser(String username, String roleName) {
+        if (!userRepository.findByUsername(username).isPresent()) {
+            throw new NotFoundException("User does not exist.");
+        }
+        if (!roleRepository.findByName(roleName).isPresent()) {
+            throw new NotFoundException("Role does not exist.");
+        }
+        User user = userRepository.findByUsername(username).get();
+        Role role = roleRepository.findByName(roleName).get();
         log.info("Adding role {} to user {}", roleName, username);
-        User user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByName(roleName);
-        log.info(role.toString());
         user.getRoles().add(role);
     }
     @Override
@@ -84,22 +136,34 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public User getUserById(Long id) {
+        if (userRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("User does not exist");
+        }
         log.info("Fetching user with id {}", id);
         return userRepository.getById(id);
     }
 
     @Override
     public User getUserByUsername(String username) {
+        if (!userRepository.findByUsername(username).isPresent()) {
+            throw new NotFoundException("Username does not exist");
+        }
         log.info("Fetching user with username {}", username);
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).get();
     }
 
     public User getUserByEmail(String email) {
+        if (!userRepository.findByEmail(email).isPresent()) {
+            throw new NotFoundException("E-mail does not exist");
+        }
         log.info("Fetching user with email {}", email);
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).get();
     }
 
     public Role getRoleByName(String name) {
-        return roleRepository.findByName(name);
+        if (!roleRepository.findByName(name).isPresent()) {
+            throw new NotFoundException("Role does not exist");
+        }
+        return roleRepository.findByName(name).get();
     }
 }

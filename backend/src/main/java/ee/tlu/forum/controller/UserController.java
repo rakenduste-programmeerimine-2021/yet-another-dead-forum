@@ -30,20 +30,15 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
         // ServletUriComponentsBuilder.fromCurrentContextPath() - returns current link up to the port (8080)
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/save").toUriString());
-        List<Role> r = new ArrayList<>();
-        r.add(userService.getRoleByName("ROLE_USER"));
-        user.setRoles(r);
-        userService.saveUser(user);
-        return ResponseEntity.created(uri).build();
-        // todo PSQLException - user already exists
+        return ResponseEntity.created(uri).body(userService.registerUser(user));
     }
 
-    @PostMapping("/user/save")
+    @PostMapping("/user/edit")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
-        return ResponseEntity.ok().body(userService.saveUser(user));
+        return ResponseEntity.ok().body(userService.editUser(user));
     }
 
     @GetMapping("/user/{id}")

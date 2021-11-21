@@ -77,16 +77,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                         .collect(Collectors.toList()))
                 .sign(algorithm); // sign it with the selected algorithm and secret
 
-        String refreshToken = JWT.create()
-                .withSubject(user.getUsername()) // needs a string that's unique to the user so it can identify the user by the specific token
-                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // expires in one hour
-                .withIssuer(request.getRequestURL().toString()) // author of token, eg url of app
-                .sign(algorithm); // sign it with the selected algorithm and secret
-
         // Parse the tokens as json
         Map<String, String> tokens = new HashMap<>();
-        tokens.put("access_token", accessToken);
-        tokens.put("refresh_token", refreshToken);
+        tokens.put("token", accessToken);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
