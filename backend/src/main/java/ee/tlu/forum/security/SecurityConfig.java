@@ -37,9 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // changing default /login path to /api/login
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
-
+        http.csrf().disable().cors();
         // Default config tracks user by cookies, we will use JWT instead.
-        http.csrf().disable(); // disabled cross-site request forgery
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // allow to use swagger without logging in (at least for now)
