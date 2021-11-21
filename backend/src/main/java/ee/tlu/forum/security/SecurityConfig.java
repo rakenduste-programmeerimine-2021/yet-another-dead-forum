@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
         // Default config tracks user by cookies, we will use JWT instead.
-        http.csrf().disable(); // disabled cross-site request forgery
+        http.csrf().disable().cors(); // disabled cross-site request forgery && enable cors
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // allow to use swagger without logging in (at least for now)
