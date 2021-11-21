@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
@@ -26,21 +29,28 @@ public class User extends BaseEntity {
     private String username;
 
     @NotNull
+    @Column(unique = true)
+    // regex from here https://www.baeldung.com/java-email-validation-regex
+    @Pattern(regexp = "[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+            + "[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+            + "(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9]"
+            + "(?:[A-Za-z0-9-]*[A-Za-z0-9])?",
+            message = "E-mail must be valid")
     private String email;
 
     @NotNull
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles;
+    private Collection<Role> roles = new ArrayList<>();
 
     private String about;
 
     private String signature;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Collection<Thread> threads;
+    private Collection<Thread> threads = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Collection<Post> posts;
+    private Collection<Post> posts = new ArrayList<>();
 }
