@@ -82,6 +82,7 @@ npm start
 * Delete a rank
 * Add a rank to a user
 * Change the website title
+* Change the website colour scheme
 * Turn maintenance mode on
 * Turn maintenance mode off
 * Change the maintenance mode message
