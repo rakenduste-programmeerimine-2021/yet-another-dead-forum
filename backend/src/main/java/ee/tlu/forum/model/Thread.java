@@ -1,5 +1,8 @@
 package ee.tlu.forum.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +18,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "post"})
 public class Thread extends BaseEntity {
 
     @Id
@@ -29,8 +33,11 @@ public class Thread extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+//    @JsonBackReference
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "threads", "posts", "about", "password", "email"})
     private User author;
 
     @OneToMany(mappedBy = "thread", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Collection<Post> post = new ArrayList<>();
+    @JsonManagedReference
+    private Collection<Post> posts = new ArrayList<>();
 }
