@@ -1,5 +1,7 @@
 package ee.tlu.forum.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "threads", "posts"})
 @Table(name = "users") // 'user' is a reserved keyword and cannot be used
 public class User extends BaseEntity {
 
@@ -49,8 +51,10 @@ public class User extends BaseEntity {
     private String signature;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonManagedReference
     private Collection<Thread> threads = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonManagedReference
     private Collection<Post> posts = new ArrayList<>();
 }

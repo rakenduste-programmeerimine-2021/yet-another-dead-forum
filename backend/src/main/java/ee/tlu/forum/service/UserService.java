@@ -91,10 +91,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         log.info("Saving new user - " + user.getUsername());
         Role role = roleRepository.findByName("ROLE_USER").get();
-        log.info("ROLE {}", role.getName());
         User newUser = userRepository.save(user);
-        log.info("USER {} - ROLES {}", newUser.getUsername(), newUser.getRoles());
-        log.info("NEW USER ROLES");
         newUser.getRoles().add(role);
         return newUser;
     }

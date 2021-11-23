@@ -3,7 +3,9 @@ package ee.tlu.forum.service;
 
 import ee.tlu.forum.exception.BadRequestException;
 import ee.tlu.forum.exception.NotFoundException;
+import ee.tlu.forum.model.Post;
 import ee.tlu.forum.model.Thread;
+import ee.tlu.forum.model.User;
 import ee.tlu.forum.model.input.AddNewThreadInput;
 import ee.tlu.forum.repository.ThreadRepository;
 import ee.tlu.forum.repository.UserRepository;
@@ -26,7 +28,24 @@ public class ThreadService implements ThreadServiceInterface {
 
     @Override
     public Thread createThread(AddNewThreadInput form) {
-        return null;
+        if (form.getTitle() == null || form.getTitle().isEmpty()) {
+            throw new BadRequestException("Title field cannot be empty.");
+        }
+        if (form.getContent() == null || form.getContent().isEmpty()) {
+            throw new BadRequestException("Content field cannot be empty.");
+        }
+        if (form.getUsername() == null || form.getUsername().isEmpty()) {
+            throw new BadRequestException("Username field cannot be empty.");
+        }
+        Optional<User> user = userRepository.findByUsername(form.getUsername());
+        if (user.isEmpty()) {
+            throw new NotFoundException("User " + form.getUsername() + " not found");
+        }
+        Thread thread = new Thread();
+        thread.setTitle(form.getTitle());
+        thread.setAuthor(user.get());
+        thread.setText(form.getContent());
+        return threadRepository.save(thread);
     }
 
     @Override
@@ -44,22 +63,70 @@ public class ThreadService implements ThreadServiceInterface {
     }
 
     @Override
-    public Thread editThread(AddNewThreadInput form) {
-        return null;
+    public Thread editThread(Thread thread) {
+        if (thread.getId() == null) {
+            throw new BadRequestException("Field must contain a thread ID");
+        }
+        Optional<Thread> threadOptional = threadRepository.findById(thread.getId());
+        if (threadOptional.isEmpty()) {
+            throw new NotFoundException("Thread with ID " + thread.getId() + " does not exist");
+        }
+        if (thread.getText() != null) {
+            if (thread.getText().length() == 0) {
+                throw new BadRequestException("Text field cannot be empty!");
+            }
+            threadOptional.get().setText(thread.getText());
+        }
+        if (thread.getTitle() != null) {
+            if (thread.getTitle().length() == 0) {
+                throw new BadRequestException("Title field cannot be empty!");
+            }
+            threadOptional.get().setTitle(thread.getTitle());
+        }
+        log.info("Saving thread");
+        return threadOptional.get();
     }
 
     @Override
     public List<Thread> getAllThreads() {
-        return null;
+        log.info("Fetching all threads");
+        return threadRepository.findAll();
     }
 
     @Override
     public Thread getThreadById(Long id) {
-        return null;
+        if (id == null) {
+            throw new BadRequestException("Cannot get thread without ID");
+        }
+        Optional<Thread> thread = threadRepository.findById(id);
+        if (thread.isEmpty()) {
+            throw new NotFoundException("Thread with ID " + id + " does not exist");
+        }
+        log.info("Fetching thread with ID: " + id);
+        return thread.get();
     }
 
     @Override
     public List<Thread> getAllThreadsByUserId(Long id) {
-        return null;
+        if (id == null) {
+            throw new BadRequestException("Cannot get threads without user ID.");
+        }
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NotFoundException("No user with ID " + id + " exists.");
+        }
+        return (List<Thread>) user.get().getThreads();
+    }
+
+    @Override
+    public List<Thread> getAllThreadsByUsername(String username) {
+        if (username == null || username.isEmpty()) {
+            throw new BadRequestException("Cannot get threads without username.");
+        }
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new NotFoundException("No user with username " + username + " exists.");
+        }
+        return (List<Thread>) user.get().getThreads();
     }
 }

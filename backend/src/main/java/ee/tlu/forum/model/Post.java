@@ -1,5 +1,7 @@
 package ee.tlu.forum.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,9 +26,12 @@ public class Post extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+//    @JsonBackReference
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "threads", "posts", "about", "password", "email"})
     private User author;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "thread_id", nullable = false)
+    @JsonBackReference
     private Thread thread;
 }
