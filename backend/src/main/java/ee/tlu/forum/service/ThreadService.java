@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,6 +92,18 @@ public class ThreadService implements ThreadServiceInterface {
     public List<Thread> getAllThreads() {
         log.info("Fetching all threads");
         return threadRepository.findAll();
+    }
+
+    public Collection<Post> getAllPostsByThreadId(Long id) {
+        if (id == null) {
+            throw new BadRequestException("Cannot get thread posts without thread ID");
+        }
+        Optional<Thread> thread = threadRepository.findById(id);
+        if (thread.isEmpty()) {
+            throw new NotFoundException("Thread with ID " + id + " does not exist");
+        }
+        log.info("Fetching thread with ID: " + id);
+        return thread.get().getPosts();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ee.tlu.forum.controller;
 
+import ee.tlu.forum.model.Post;
 import ee.tlu.forum.model.Thread;
 import ee.tlu.forum.model.input.AddNewThreadInput;
 import ee.tlu.forum.service.ThreadService;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -46,6 +48,11 @@ public class ThreadController {
     public ResponseEntity<?> deleteThread(@PathVariable Long id) {
         threadService.deleteThreadById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/thread/{id}/posts")
+    public ResponseEntity<Collection<Post>> getAllThreadPosts(@PathVariable Long id) {
+        return ResponseEntity.ok().body(threadService.getAllPostsByThreadId(id));
     }
 
     @GetMapping("/threads/userid/{id}")
