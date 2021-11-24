@@ -53,7 +53,6 @@ class RoleControllerTest {
 
         when (userService.getRoles())
                 .thenReturn(roles);
-
         // when then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/roles"))
                 .andExpect(MockMvcResultMatchers.status().is(200))
