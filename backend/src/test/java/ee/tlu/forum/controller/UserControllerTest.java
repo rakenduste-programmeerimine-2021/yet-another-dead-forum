@@ -71,7 +71,40 @@ class UserControllerTest {
     }
 
     @Test
-    void registerUser() {
+    @DisplayName("Returns registered user as response at POST - /api/register")
+    void registerUser() throws Exception {
+        Role role1 = new Role(1L, "Test1");
+        Collection<Role> roles = Arrays.asList(role1);
+        User user = new User(1L,
+                "user1",
+                "test1@test.com",
+                "123123123",
+                roles,
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>());
+        Map<String, String> form = new HashMap<>();
+        form.put("username", "user1");
+        form.put("email", "test@test.com");
+        form.put("password", "123123123");
+
+        String formToJson = new ObjectMapper().writeValueAsString(form);
+        when (userService.registerUser(any()))
+                .thenReturn(user);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/register")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(formToJson);
+
+        // when then
+        mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().is(201))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("user1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.roles.size()", Matchers.is(1)));
     }
 
     @Test
@@ -87,7 +120,6 @@ class UserControllerTest {
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
-        Map<String, String> form = new HashMap<>();
 
         String userToJson = new ObjectMapper().writeValueAsString(user);
         when (userService.editUser(any(User.class)))
