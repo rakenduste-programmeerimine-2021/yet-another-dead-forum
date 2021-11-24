@@ -20,6 +20,7 @@ public class Post extends BaseEntity {
     private Long id;
 
     @NotNull
+    @Column(length = 1024)
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
