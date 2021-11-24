@@ -120,7 +120,6 @@ class UserControllerTest {
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
-
         String userToJson = new ObjectMapper().writeValueAsString(user);
         when (userService.editUser(any(User.class)))
                 .thenReturn(user);
