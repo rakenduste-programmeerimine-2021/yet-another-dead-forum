@@ -1,9 +1,7 @@
 package ee.tlu.forum.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ee.tlu.forum.model.Post;
 import ee.tlu.forum.model.Role;
-import ee.tlu.forum.model.Thread;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.service.UserService;
 import org.hamcrest.Matchers;
@@ -22,7 +20,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
