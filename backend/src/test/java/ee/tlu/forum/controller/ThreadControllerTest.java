@@ -1,9 +1,7 @@
 package ee.tlu.forum.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.tlu.forum.model.Post;
-import ee.tlu.forum.model.Role;
 import ee.tlu.forum.model.Thread;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.model.input.AddNewThreadInput;
