@@ -38,6 +38,14 @@ public class ThreadService implements ThreadServiceInterface {
         if (form.getUsername() == null || form.getUsername().isEmpty()) {
             throw new BadRequestException("Username field cannot be empty.");
         }
+        if (form.getTitle().length() > 255) {
+            throw new BadRequestException("Title character limit exceeded." +
+                    " Maximum: 255 characters. You have: " + form.getTitle().length());
+        }
+        if (form.getContent().length() > 3096) {
+            throw new BadRequestException("Content character limit exceeded." +
+                    " Maximum: 3096 characters. You have: " + form.getContent().length());
+        }
         Optional<User> user = userRepository.findByUsername(form.getUsername());
         if (user.isEmpty()) {
             throw new NotFoundException("User " + form.getUsername() + " not found");
@@ -76,11 +84,19 @@ public class ThreadService implements ThreadServiceInterface {
             if (thread.getText().length() == 0) {
                 throw new BadRequestException("Text field cannot be empty!");
             }
+            if (thread.getText().length() > 3096) {
+                throw new BadRequestException("Content character limit exceeded." +
+                        " Maximum: 3096 characters. You have: " + thread.getText().length());
+            }
             threadOptional.get().setText(thread.getText());
         }
         if (thread.getTitle() != null) {
             if (thread.getTitle().length() == 0) {
                 throw new BadRequestException("Title field cannot be empty!");
+            }
+            if (thread.getTitle().length() > 255) {
+                throw new BadRequestException("Title character limit exceeded." +
+                        " Maximum: 255 characters. You have: " + thread.getTitle().length());
             }
             threadOptional.get().setTitle(thread.getTitle());
         }
