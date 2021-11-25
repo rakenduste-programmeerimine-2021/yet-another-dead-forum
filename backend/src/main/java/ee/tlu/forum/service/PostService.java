@@ -37,6 +37,10 @@ public class PostService implements PostServiceInterface {
         if (form.getThreadId() == null) {
             throw new BadRequestException("Thread ID field cannot be empty.");
         }
+        if (form.getText().length() > 1024) {
+            throw new BadRequestException("Content character limit exceeded." +
+                    " Maximum: 1024 characters. You have: " + form.getText().length());
+        }
         Optional<User> user = userRepository.findByUsername(form.getUsername());
         if (user.isEmpty()) {
             throw new NotFoundException("User with username " + form.getUsername() + " was not found.");
@@ -80,6 +84,10 @@ public class PostService implements PostServiceInterface {
         if (post.getText() != null) {
             if (post.getText().length() == 0) {
                 throw new BadRequestException("Text field cannot be empty!");
+            }
+            if (post.getText().length() > 1024) {
+                throw new BadRequestException("Content character limit exceeded." +
+                        " Maximum: 1024 characters. You have: " + post.getText().length());
             }
             postOptional.get().setText(post.getText());
         }
