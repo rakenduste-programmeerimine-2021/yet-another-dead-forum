@@ -3,6 +3,9 @@ import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 
 import { default as PageHeader } from './components/Header';
+import Forum from './pages/Forum';
+import Profile from './pages/Profile';
+import Configure from './pages/Configure';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -17,7 +20,9 @@ function App() {
         <Content style={{padding: '50px'}}>
           <div style={{background: '#fff', height: '100%', padding: '20px'}}>
             <Routes>
-              <Route exact path="/" element={<Login />} />
+              <Route exact path="/" element={<Forum />} />
+              <Route exact path="/profile" element={<Profile />} />
+              <Route exact path="/configure" element={<Configure />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
             </Routes>

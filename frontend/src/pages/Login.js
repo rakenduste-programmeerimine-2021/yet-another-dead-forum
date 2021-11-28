@@ -1,13 +1,15 @@
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography } from 'antd';
 import { Context } from '../store';
 import { loginUser } from '../store/actions';
 
 const Login = () => {
-  const [userName, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [state, dispatch] = useContext(Context)
+  const [userName, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [state, dispatch] = useContext(Context);
+  const navigate = useNavigate();
 
   const { Title, Text } = Typography;
 
@@ -25,10 +27,11 @@ const Login = () => {
       body: JSON.stringify(userData),
     })
     
-    const returnData = await res.json()
+    const returnData = await res.json();
 
-    if(returnData.access_token) {
-      dispatch(loginUser(returnData))
+    if(returnData.token) {
+      dispatch(loginUser(returnData));
+      navigate('/', { replace: true });
     } else {
       let errors = ''
         if (returnData.error) {
@@ -63,7 +66,12 @@ const Login = () => {
             <Form.Item 
               label="Username"
               name="userName"
-              required
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
+              ]}
             >
               <Input
                 onChange={e => setUsername(e.target.value)}
@@ -73,7 +81,12 @@ const Login = () => {
             <Form.Item 
               label="Password"
               name="password"
-              required
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
             >
               <Input.Password
                 onChange={e => setPassword(e.target.value)}
