@@ -3,7 +3,7 @@ import combineReducers from 'react-combine-reducers';
 import { authReducer } from './reducer';
 
 const initialAuth = {
-  token: null,
+  token: localStorage.getItem('token'),
   user: null,
 };
 

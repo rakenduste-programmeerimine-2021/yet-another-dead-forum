@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography } from 'antd';
+import { Context } from '../store';
+import { loginUser } from '../store/actions';
 
 function Register() {
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
+  const [state, dispatch] = useContext(Context);
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     const user = {
@@ -11,88 +17,169 @@ function Register() {
       password: values.password
     }
 
-    if (!values.userName || !values.email || !values.password || !values.confirm) {
-      setError('Please fill out all of the fields')
-    } else if (values.password !== values.confirm) {
-      setError('Passwords do not match!')
-    } else {
-      const res = await fetch('http://localhost:8080/api/register', {
+    const res = await fetch('http://localhost:8080/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+        body: JSON.stringify(user),
+    })
+
+    const returnData = await res.json()
+
+    if (res.ok) {
+      setError('')
+      const loginData = {
+        username: values.userName,
+        password: values.password
+      }
+
+      const response = await fetch('http://localhost:8080/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-          body: JSON.stringify(user),
+        body: JSON.stringify(loginData),
       })
+      
+      const returnLoginData = await response.json()
 
-      const returnData = await res.json()
-
-      if (res.ok) {
-        setError('')
-        console.log("Success! User registered!")
+      if(returnLoginData.token) {
+        dispatch(loginUser(loginData))
+        navigate('/', { replace: true });
       } else {
-        let errors = ''
-        if (returnData.error) {
-          errors = returnData.error
+        let errs = ''
+        if (returnLoginData.error_message) {
+          errs = returnLoginData.error_message
         } else {
-          for (let i = 0; i < returnData.msg.length; i++) {
-            errors += returnData.msg[i].param[0].toUpperCase() + returnData.msg[i].param.slice(1) + ' ' + returnData.msg[i].msg + '\n'
+          for (let i = 0; i < returnLoginData.msg.length; i++) {
+            errs += (returnLoginData.msg[i].param[0].toUpperCase() + returnLoginData.msg[i].param.slice(1) + ' ' +
+            returnLoginData.msg[i].msg + '\n')
           }
         }
-        setError(errors)
+        setError(errs)
       }
+    } else {
+      let errors = ''
+      if (returnData.error_message) {
+        errors = returnData.error_message
+      } else {
+        for (let i = 0; i < returnData.msg.length; i++) {
+          errors += (returnData.msg[i].param[0].toUpperCase() + returnData.msg[i].param.slice(1) + ' ' +
+          returnData.msg[i].msg + '\n')
+        }
+      }
+      setError(errors)
     }
   }
 
   const { Title, Text } = Typography;
   return(
     <>
-      <Title style={{textAlign: 'center'}}>Register</Title>
-      <Form
-        name="basic"
-        style={{maxWidth: '50%', margin: 'auto'}}
-        initialValues={{ remember: true }}
-        onFinish={handleSubmit}
-        autoComplete="off"
-      >
-        <Form.Item 
-          label="Username"
-          name="userName"
-          required
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item 
-          label="E-mail"
-          name="email"
-          required
-        >
-          <Input />
-        </Form.Item>
+    { !state.auth.token &&
+      (
+        <>
+          <Title style={{textAlign: 'center'}}>Register</Title>
+          <Form
+            form={form}
+            name="register"
+            style={{maxWidth: '50%', margin: 'auto'}}
+            initialValues={{ remember: true }}
+            onFinish={handleSubmit}
+            autoComplete="off"
+            scrollToFirstError
+          >
+            <Form.Item 
+              label="Username"
+              name="userName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                  whitespace: true,
+                },
+                {
+                  pattern: /^[A-ZÕÄÖÜa-zõäöü0-9]+$/,
+                  message: 'Username can only include letters and numbers.',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item 
+              label="E-mail"
+              name="email"
+              rules={[
+                {
+                  type: 'email',
+                  message: 'Please input a correctly formatted e-mail address!'
+                },
+                {
+                  required: true,
+                  message: 'Please input your e-mail!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-        <Form.Item 
-          label="Password"
-          name="password"
-          required
-        >
-          <Input.Password />
-        </Form.Item>
+            <Form.Item 
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please choose a password!',
+                },
+                {
+                  min: 8,
+                  message: 'Password must be at least 8 characters long'
+                },
+              ]}
+              hasFeedback
+            >
+              <Input.Password />
+            </Form.Item>
 
-        <Form.Item 
-          label="Confirm Password"
-          name="confirm"
-          required
-        >
-          <Input.Password />
-        </Form.Item>
-        { error && <Text style={{whiteSpace: 'pre-wrap'}} type="danger">{ error }</Text> }
+            <Form.Item 
+              label="Confirm Password"
+              name="confirm"
+              dependencies={['password']}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('The passwords do not match!'));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            { error && <Text style={{whiteSpace: 'pre-wrap'}} type="danger">{ error }</Text> }
 
-        <Form.Item style={{textAlign: 'center'}}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+            <Form.Item style={{textAlign: 'center'}}>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
 
-      </Form>
+          </Form>
+        </>
+      )
+    }
+    { state.auth.token &&
+      (
+        <Title style={{textAlign: 'center'}}>Welcome, {state.user}!</Title>
+      )
+    }
     </>
   )
 }
