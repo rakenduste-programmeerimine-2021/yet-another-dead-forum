@@ -53,6 +53,7 @@ class PostControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -82,6 +83,7 @@ class PostControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -110,6 +112,7 @@ class PostControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -148,6 +151,7 @@ class PostControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -184,6 +188,7 @@ class PostControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -218,6 +223,7 @@ class PostControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
