@@ -46,9 +46,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
             log.info("User {} found in the database", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.get().getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        });
+        user.get().getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), authorities);
         // return spring security's User class location to not mix up with the forum's own User class.
     }
@@ -109,10 +107,10 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public void addRoleToUser(String username, String roleName) {
-        if (!userRepository.findByUsername(username).isPresent()) {
+        if (userRepository.findByUsername(username).isEmpty()) {
             throw new NotFoundException("User does not exist.");
         }
-        if (!roleRepository.findByName(roleName).isPresent()) {
+        if (roleRepository.findByName(roleName).isEmpty()) {
             throw new NotFoundException("Role does not exist.");
         }
         User user = userRepository.findByUsername(username).get();
@@ -142,7 +140,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public User getUserByUsername(String username) {
-        if (!userRepository.findByUsername(username).isPresent()) {
+        if (userRepository.findByUsername(username).isEmpty()) {
             throw new NotFoundException("Username does not exist");
         }
         log.info("Fetching user with username {}", username);
@@ -150,7 +148,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     public User getUserByEmail(String email) {
-        if (!userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmail(email).isEmpty()) {
             throw new NotFoundException("E-mail does not exist");
         }
         log.info("Fetching user with email {}", email);
@@ -158,7 +156,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     public Role getRoleByName(String name) {
-        if (!roleRepository.findByName(name).isPresent()) {
+        if (roleRepository.findByName(name).isEmpty()) {
             throw new NotFoundException("Role does not exist");
         }
         return roleRepository.findByName(name).get();
