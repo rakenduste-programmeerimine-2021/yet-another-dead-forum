@@ -48,12 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // allow only certain roles access to these endpoints
         http.authorizeRequests().antMatchers(GET, "/api/users/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers(GET, "/api/user/*").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
 
         // allow every URL to every non-logged in user
         http.authorizeRequests().antMatchers("/api/**").permitAll();
-//        http.authorizeRequests().antMatchers("/api/roles").permitAll();
+        http.authorizeRequests().antMatchers("/api/roles").permitAll();
 
         http.authorizeRequests().anyRequest().authenticated(); // need to be authenticated
 
