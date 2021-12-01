@@ -46,8 +46,13 @@ public class User extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
+    @NotNull
     private String about = "";
 
+    @NotNull
+    private Long visits = 0L;
+
+    @NotNull
     private String signature = "";
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

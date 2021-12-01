@@ -52,6 +52,7 @@ class ThreadControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -81,6 +82,7 @@ class ThreadControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -108,6 +110,7 @@ class ThreadControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -146,6 +149,7 @@ class ThreadControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -183,6 +187,7 @@ class ThreadControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -214,6 +219,7 @@ class ThreadControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -244,6 +250,7 @@ class ThreadControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());

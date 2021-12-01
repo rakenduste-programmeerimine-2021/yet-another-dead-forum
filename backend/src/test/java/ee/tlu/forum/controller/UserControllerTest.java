@@ -52,6 +52,7 @@ class UserControllerTest {
                 "aaa",
                 roles,
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -78,6 +79,7 @@ class UserControllerTest {
                 "123123123",
                 roles,
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -114,6 +116,7 @@ class UserControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
@@ -144,6 +147,7 @@ class UserControllerTest {
                 "aaa",
                 new ArrayList<>(),
                 "",
+                0L,
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
