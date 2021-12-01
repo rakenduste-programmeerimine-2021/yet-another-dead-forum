@@ -1,6 +1,5 @@
 package ee.tlu.forum.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +69,18 @@ public class UserController {
     public ResponseEntity<?> getThreadCountByUserUsername(@PathVariable String username) {
         Map<String, Long> response = new HashMap<>();
         response.put("threadCount", userService.getUserThreadCount(username));
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/user/{username}/profile")
+    public ResponseEntity<User> getUserProfile(@PathVariable String username) {
+        return ResponseEntity.ok().body(userService.getUserProfileByUsername(username));
+    }
+
+    @GetMapping("/user/{username}/visits")
+    public ResponseEntity<?> getUserVisitsCount(@PathVariable String username) {
+        Map<String, Long> response = new HashMap<>();
+        response.put("visits", userService.getUserProfileVisitsCount(username));
         return ResponseEntity.ok().body(response);
     }
 

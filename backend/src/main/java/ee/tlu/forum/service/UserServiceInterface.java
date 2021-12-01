@@ -18,4 +18,5 @@ public interface UserServiceInterface{
     Long getUserProfileVisitsCount(String username);
     void deleteUserById(Long id);
     void deleteUserByUsername(String username);
+    User getUserProfileByUsername(String username);
 }
