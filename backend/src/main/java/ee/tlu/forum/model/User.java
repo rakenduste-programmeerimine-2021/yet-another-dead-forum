@@ -46,9 +46,9 @@ public class User extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
-    private String about;
+    private String about = "";
 
-    private String signature;
+    private String signature = "";
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JsonManagedReference
