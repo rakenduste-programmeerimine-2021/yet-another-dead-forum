@@ -1,15 +1,10 @@
 package ee.tlu.forum.service;
 
-import ee.tlu.forum.exception.NotFoundException;
 import ee.tlu.forum.model.Donation;
-import ee.tlu.forum.model.User;
 import ee.tlu.forum.model.input.DonationInput;
 import ee.tlu.forum.model.input.EverypayResponse;
 import ee.tlu.forum.model.output.EverypayData;
 import ee.tlu.forum.model.output.EverypayLink;
-import ee.tlu.forum.repository.DonationRepository;
-import ee.tlu.forum.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
