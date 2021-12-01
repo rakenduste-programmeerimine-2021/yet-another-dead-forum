@@ -19,7 +19,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "post"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Thread extends BaseEntity {
 
     @Id
