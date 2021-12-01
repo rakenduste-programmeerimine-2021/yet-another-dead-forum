@@ -158,7 +158,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public Long getUserVisitsCount(String username) {
+    public Long getUserProfileVisitsCount(String username) {
         return null;
     }
 
