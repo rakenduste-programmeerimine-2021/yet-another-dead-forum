@@ -4,6 +4,7 @@ import ee.tlu.forum.exception.AlreadyExistsException;
 import ee.tlu.forum.exception.BadRequestException;
 import ee.tlu.forum.exception.NotFoundException;
 import ee.tlu.forum.model.Role;
+import ee.tlu.forum.model.Thread;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.repository.RoleRepository;
 import ee.tlu.forum.repository.UserRepository;
@@ -149,12 +150,26 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public Long getUserPostCount(String username) {
-        return null;
+        if (username == null) {
+            throw new BadRequestException("Cannot get post count without username.");
+        }
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new NotFoundException("No user with username " + username + " exists.");
+        }
+        return (long) user.get().getPosts().size();
     }
 
     @Override
     public Long getUserThreadCount(String username) {
-        return null;
+        if (username == null) {
+            throw new BadRequestException("Cannot get thread count without username.");
+        }
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new NotFoundException("No user with username " + username + " exists.");
+        }
+        return (long) user.get().getThreads().size();
     }
 
     @Override

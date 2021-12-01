@@ -1,5 +1,6 @@
 package ee.tlu.forum.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -54,6 +57,20 @@ public class UserController {
     public ResponseEntity<User> deleteUserByUsername(@PathVariable String username) {
         userService.deleteUserByUsername(username);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user/{username}/postcount")
+    public ResponseEntity<?> getPostCountByUserUsername(@PathVariable String username) {
+        Map<String, Long> response = new HashMap<>();
+        response.put("postCount", userService.getUserPostCount(username));
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/user/{username}/threadcount")
+    public ResponseEntity<?> getThreadCountByUserUsername(@PathVariable String username) {
+        Map<String, Long> response = new HashMap<>();
+        response.put("threadCount", userService.getUserThreadCount(username));
+        return ResponseEntity.ok().body(response);
     }
 
 }
