@@ -173,8 +173,20 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
+    public User getUserProfileByUsername(String username) {
+        User user = getUserByUsername(username);
+        user.setVisits(user.getVisits() + 1);
+        return user;
+    }
+
+    @Override
     public Long getUserProfileVisitsCount(String username) {
-        return null;
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new NotFoundException("Username does not exist");
+        }
+        log.info("Fetching user profile visits for: {}", username);
+        return user.get().getVisits();
     }
 
     @Override
