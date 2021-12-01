@@ -147,6 +147,41 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         return userRepository.findByUsername(username).get();
     }
 
+    @Override
+    public Long getUserPostCount(String username) {
+        return null;
+    }
+
+    @Override
+    public Long getUserThreadCount(String username) {
+        return null;
+    }
+
+    @Override
+    public Long getUserVisitsCount(String username) {
+        return null;
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User with ID " + id + " does not exist");
+        }
+        log.info("Deleting user with ID: {}", id);
+        userRepository.delete(user.get());
+    }
+
+    @Override
+    public void deleteUserByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new NotFoundException("Username does not exist");
+        }
+        log.info("Deleting user: {}", username);
+        userRepository.delete(user.get());
+    }
+
     public User getUserByEmail(String email) {
         if (userRepository.findByEmail(email).isEmpty()) {
             throw new NotFoundException("E-mail does not exist");

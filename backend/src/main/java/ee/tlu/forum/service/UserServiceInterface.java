@@ -13,4 +13,9 @@ public interface UserServiceInterface{
     List<User> getUsers();
     User getUserById(Long id);
     User getUserByUsername(String username);
+    Long getUserPostCount(String username);
+    Long getUserThreadCount(String username);
+    Long getUserVisitsCount(String username);
+    void deleteUserById(Long id);
+    void deleteUserByUsername(String username);
 }
