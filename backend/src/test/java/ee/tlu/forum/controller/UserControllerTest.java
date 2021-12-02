@@ -226,4 +226,34 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.visits", Matchers.is(999)));
     }
+
+    @Test
+    @DisplayName("Returns a user's profile by username - GET /api/user/{username}/profile")
+    void getUserProfile() throws Exception {
+        //given
+        User user = new User(1L,
+                "user1",
+                "test1@test.com",
+                "aaa",
+                new ArrayList<>(),
+                "",
+                0L,
+                "",
+                new ArrayList<>(),
+                new ArrayList<>());
+
+        when(userService.getUserProfileByUsername(any())).thenAnswer((User) -> {
+            user.setVisits(user.getVisits() + 1);
+            return user;
+        });
+
+        // when then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/user1/profile"))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("user1")))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.visits", Matchers.is(1)));
+    }
+
 }
