@@ -1,6 +1,7 @@
 package ee.tlu.forum.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.tlu.forum.model.Post;
 import ee.tlu.forum.model.Role;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.service.UserService;
@@ -8,6 +9,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -161,5 +164,24 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("user1")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.roles.size()", Matchers.is(0)));
+    }
+
+    @Test
+    @DisplayName("Returns a test user's post count - GET /api/{username}/postcount")
+    void getUserPostCount() throws Exception {
+        //given
+        List<Post> posts = new ArrayList<>();
+        posts.add(new Post());
+        posts.add(new Post());
+        posts.add(new Post());
+
+        when(userService.getUserPostCount(any())).thenReturn((long) posts.size());
+
+        // when then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/TestUser/postcount"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.postCount", Matchers.is(3)));
     }
 }
