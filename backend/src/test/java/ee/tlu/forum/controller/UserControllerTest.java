@@ -202,4 +202,28 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.threadCount", Matchers.is(5)));
     }
+
+    @Test
+    @DisplayName("Returns a test user's visits count - GET /api/{username}/visits")
+    void getUserVisitsCount() throws Exception {
+        //given
+        User user = new User(1L,
+                "user1",
+                "test1@test.com",
+                "aaa",
+                new ArrayList<>(),
+                "",
+                999L,
+                "",
+                new ArrayList<>(),
+                new ArrayList<>());
+
+        when(userService.getUserProfileVisitsCount(any())).thenReturn(user.getVisits());
+
+        // when then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/TestUser/visits"))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.visits", Matchers.is(999)));
+    }
 }
