@@ -9,7 +9,7 @@
 * Markus Tammeoja
 
 ## 💡 Idea:
-A simple and forum.
+A simple, dead forum.
 
 ## 🎨 Wireframe
 [Wireframe](https://lucid.app/lucidchart/d2b2d9c6-6dbd-4ebd-8750-2ed59556a80b/edit?viewport_loc=927%2C-111%2C1664%2C791%2C0_0&invitationId=inv_2093a20f-be4d-4a9e-811f-ef1ee4aaaaf2 "Initial wireframe")
