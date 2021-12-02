@@ -214,7 +214,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("Returns a list of posts belonging to a user by username - GET /api/posts/userid/{id}")
+    @DisplayName("Returns a list of posts belonging to a user by username - GET /api/posts/username/{username}")
     void getPostsByUsername() throws Exception {
         // given
         User user = new User(1L,
