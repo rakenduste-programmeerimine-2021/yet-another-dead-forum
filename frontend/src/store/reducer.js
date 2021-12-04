@@ -1,4 +1,4 @@
-import { USER_CREATE, USER_LOGIN, USER_LOGOUT } from './actions';
+import { USER_CREATE, USER_LOGIN, USER_LOGOUT, THREADS_UPDATE } from './actions';
 
 const authReducer = (state, action) => {
   switch(action.type) {
@@ -10,6 +10,7 @@ const authReducer = (state, action) => {
       }
     case USER_LOGIN:
       localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', action.payload.user);
       return {
         ...state,
         token: action.payload.token,
@@ -27,4 +28,16 @@ const authReducer = (state, action) => {
   }
 };
 
-export { authReducer };
+const threadReducer = (state, action) => {
+  switch(action.type) {
+    case THREADS_UPDATE:
+      return {
+        ...state,
+        data: action.payload
+      }
+    default:
+      return state
+  }
+}
+
+export { authReducer, threadReducer };
