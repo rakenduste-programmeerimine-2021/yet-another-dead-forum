@@ -3,6 +3,7 @@ package ee.tlu.forum.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.tlu.forum.service.UserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,16 +13,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -31,8 +34,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private final AuthenticationManager authenticationManager; // authenticates the actual user
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager1) {
-        this.authenticationManager = authenticationManager1;
+    UserService userService;
+
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -65,21 +70,40 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // The below 'User' class belongs to UserDetails (same class name)
         User user = (User) auth.getPrincipal(); // returns the user that's been authenticated
 
+        /*
+        hack to inject UserService
+        https://stackoverflow.com/questions/32494398/unable-to-autowire-the-service-inside-my-authentication-filter-in-spring/32495757
+         */
+        if (userService == null) {
+            ServletContext servletContext = request.getServletContext();
+            WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            userService = webApplicationContext.getBean(UserService.class);
+        }
+
+        ee.tlu.forum.model.User userInfo = userService.getUserByUsername(user.getUsername());
+
+        List<String> roles = user.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
         // Algorithm is from the Java JTW library. We input a secret here.
         Algorithm algorithm = Algorithm.HMAC256("secretmwahahaWahahahahHWhaaaaa".getBytes(StandardCharsets.UTF_8));
         String accessToken = JWT.create()
                 .withSubject(user.getUsername()) // needs a string that's unique to the user so it can identify the user by the specific token
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // expires in 60 minutes
                 .withIssuer(request.getRequestURL().toString()) // author of token, eg url of app
-                .withClaim("roles", user.getAuthorities() // pass in all the roles of the user
-                        .stream() // map with stream API
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.toList()))
+                .withClaim("roles", roles) // pass in the roles
                 .sign(algorithm); // sign it with the selected algorithm and secret
 
-        // Parse the tokens as json
+//         Parse the tokens as json
         Map<String, String> tokens = new HashMap<>();
         tokens.put("token", accessToken);
+        tokens.put("id", String.valueOf(userInfo.getId()));
+        tokens.put("username", userInfo.getUsername());
+        tokens.put("roles", roles.toString());
+        tokens.put("email", userInfo.getEmail());
+        tokens.put("about", userInfo.getEmail());
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
