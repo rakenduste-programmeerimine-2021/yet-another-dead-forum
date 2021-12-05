@@ -8,6 +8,7 @@ INSERT INTO public.users (created_at, updated_at, about, email, password, signat
 INSERT INTO public.users (created_at, updated_at, about, email, password, signature, username, visits) VALUES ('2021-11-20 21:22:36.115454', '2021-11-20 21:22:36.116453', '', 'foo@test.com', '$2a$10$xnUvv01NPMsvYQEYINiACOZTADPCoD9N6jjd7LSS4tYoYPZNdmXEG', '', 'Foo', 0) ON CONFLICT DO NOTHING;
 INSERT INTO public.users (created_at, updated_at, about, email, password, signature, username, visits) VALUES ('2021-11-20 21:22:36.115454', '2021-11-20 21:22:36.116453', '', 'bar@test.com', '$2a$10$xnUvv01NPMsvYQEYINiACOZTADPCoD9N6jjd7LSS4tYoYPZNdmXEG', '', 'Bar', 0) ON CONFLICT DO NOTHING;
 
+INSERT INTO public.users_roles (user_id, roles_id)
 SELECT
     1, 1
 WHERE NOT EXISTS (
