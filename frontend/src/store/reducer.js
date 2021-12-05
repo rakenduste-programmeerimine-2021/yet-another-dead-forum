@@ -1,4 +1,4 @@
-import { USER_CREATE, USER_LOGIN, USER_LOGOUT, THREADS_UPDATE } from './actions';
+import { USER_CREATE, USER_LOGIN, USER_LOGOUT, THREADS_UPDATE, POSTS_UPDATE } from './actions';
 
 const authReducer = (state, action) => {
   switch(action.type) {
@@ -40,4 +40,16 @@ const threadReducer = (state, action) => {
   }
 }
 
-export { authReducer, threadReducer };
+const postReducer = (state, action) => {
+  switch(action.type) {
+    case POSTS_UPDATE:
+      return {
+        ...state,
+        data: action.payload
+      }
+    default:
+      return state
+  }
+}
+
+export { authReducer, threadReducer, postReducer };
