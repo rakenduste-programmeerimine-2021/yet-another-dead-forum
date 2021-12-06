@@ -9,15 +9,14 @@ const authReducer = (state, action) => {
         user: action.payload.user,
       }
     case USER_LOGIN:
-      localStorage.setItem('token', action.payload.token);
-      localStorage.setItem('user', action.payload.user);
+      localStorage.setItem('user', JSON.stringify(action.payload));
       return {
         ...state,
         token: action.payload.token,
-        user: action.payload.user
+        user: action.payload
       }
     case USER_LOGOUT:
-      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       return {
         ...state,
         token: null,

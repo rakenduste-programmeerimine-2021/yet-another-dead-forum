@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, List, Typography } from 'antd';
 import { Context } from '../store';
 import { updateThreads } from '../store/actions';
+import './Forum.css'
 
 const Forum = () => {
   const [state, dispatch] = useContext(Context);
@@ -51,9 +52,9 @@ const Forum = () => {
                   }
                   </span>
                 }
-                {/* {state.auth.user.roles.includes('ROLE_MODERATOR') &&
-                  <span>DELETE EDIT</span>
-                } */}
+                {state.auth.token && (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === thread.author.id) &&
+                  <><span className="delete">DELETE</span><span className="edit">EDIT</span></>
+                }
               </div>
             </div>
           </List.Item>
