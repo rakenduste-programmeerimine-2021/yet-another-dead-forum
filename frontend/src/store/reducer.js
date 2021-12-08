@@ -1,4 +1,14 @@
-import { USER_CREATE, USER_LOGIN, USER_LOGOUT, THREADS_UPDATE, THREAD_ADD, POSTS_UPDATE } from './actions';
+import {
+  USER_CREATE,
+  USER_LOGIN,
+  USER_LOGOUT,
+  THREADS_UPDATE,
+  THREAD_UPDATE,
+  THREAD_ADD,
+  THREAD_EDIT,
+  THREAD_RESET,
+  POSTS_UPDATE
+} from './actions';
 
 const authReducer = (state, action) => {
   switch(action.type) {
@@ -34,10 +44,25 @@ const threadReducer = (state, action) => {
         ...state,
         data: action.payload
       }
+    case THREAD_UPDATE:
+      return {
+        ...state,
+        singleThread: action.payload
+      }
     case THREAD_ADD:
       return {
         ...state,
         data: [...state.data, action.payload]
+      }
+    case THREAD_EDIT:
+      return {
+        ...state,
+        singleThread: action.payload
+      }
+    case THREAD_RESET:
+      return {
+        ...state,
+        singleThread: {}
       }
     default:
       return state

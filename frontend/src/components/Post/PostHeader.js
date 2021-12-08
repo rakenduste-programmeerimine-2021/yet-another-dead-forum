@@ -1,8 +1,14 @@
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Typography } from 'antd';
+import { Context } from '../../store';
 
 const PostHeader = ({ data }) => {
+  const [state, dispatch] = useContext(Context);
   const { Text, Title } = Typography;
+  const created = new Date(data.createdAt)
+  const updated = new Date(data.updatedAt)
   return(
     <div style={{display: 'flex'}}>
       <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -23,7 +29,17 @@ const PostHeader = ({ data }) => {
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <Title level={5}>{data.title}</Title>
         <Text>{data.text}</Text>
+        {
+          created.getTime() < updated.getTime() &&
+          <Text style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
+        }
       </div>
+      {state.auth.token && (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === data.author.id) &&
+        <>
+          <span className="delete">DELETE</span>
+          <Link className="edit" to={"/thread/edit/" + data.id}>EDIT</Link>
+        </>
+      }
     </div>
   )
 };

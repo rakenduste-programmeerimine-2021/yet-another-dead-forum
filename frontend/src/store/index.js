@@ -8,7 +8,8 @@ const initialAuth = {
 };
 
 const initialThreads = {
-  data: []
+  data: [],
+  singleThread: {}
 }
 
 const initialPosts = {

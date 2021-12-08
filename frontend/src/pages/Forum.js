@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Button, List, Typography } from 'antd';
 import { Context } from '../store';
-import { updateThreads } from '../store/actions';
+import { updateThreads, resetSingleThread } from '../store/actions';
 import './Forum.css'
 
 const Forum = () => {
@@ -15,6 +15,7 @@ const Forum = () => {
       return res.json();
     }).then(async (data) => {
       await dispatch(updateThreads(data))
+      dispatch(resetSingleThread())
     })
   }, [])
 
@@ -54,7 +55,10 @@ const Forum = () => {
                   </span>
                 }
                 {state.auth.token && (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === thread.author.id) &&
-                  <><span className="delete">DELETE</span><span className="edit">EDIT</span></>
+                  <>
+                    <span className="delete">DELETE</span>
+                    <Link className="edit" to={"/thread/edit/" + thread.id}>EDIT</Link>
+                  </>
                 }
               </div>
             </div>

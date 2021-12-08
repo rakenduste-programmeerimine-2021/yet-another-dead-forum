@@ -1,28 +1,42 @@
-import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Input, Button, Space, Typography } from 'antd';
 import { Context } from '../../store';
-import { addThread } from '../../store/actions';
+import { updateSingleThread, editThread, resetSingleThread } from '../../store/actions';
 
-const ThreadAdd = () => {
+const ThreadEdit = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [text, setText] = useState('');
   const [error, setError] = useState('');
   const [state, dispatch] = useContext(Context);
   const navigate = useNavigate();
+  const params = useParams();  
+  
+  useEffect(() => {
+    fetch('http://localhost:8080/api/thread/' + params.id).then(res => {
+      return res.json();
+    }).then(async (data) => {
+      await dispatch(updateSingleThread(data))
+    })
+  }, [])
 
   const { TextArea } = Input;
   const { Title, Text } = Typography;
 
   const handleSubmit = async () => {
     const threadData = {
-      username: state.auth.user.username,
-      title,
-      content
+      ...state.threads.singleThread,
+      author: {
+        ...state.threads.singleThread.author,
+        username: state.auth.user.username,
+      },
+      title: title ? title : state.threads.singleThread.title,
+      text: text ? text : state.threads.singleThread.text,
+      updatedAt: new Date()
     }
 
-    const res = await fetch('http://localhost:8080/api/thread/add', {
-      method: 'POST',
+    const res = await fetch('http://localhost:8080/api/thread/edit', {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -32,8 +46,8 @@ const ThreadAdd = () => {
     const returnData = await res.json();
 
     if(res.ok) {
-      dispatch(addThread(returnData));
-      navigate('/', { replace: true });
+      dispatch(editThread(returnData));
+      navigate('/thread/' + params.id, { replace: true });
     } else {
       let errors = ''
         if (returnData.error) {
@@ -47,16 +61,22 @@ const ThreadAdd = () => {
     }
   }
 
+  const cancelEdit = () => {
+    dispatch(resetSingleThread());
+    navigate(-1);
+  }
+
   const handleError = (err) => {
     console.log(err)
   }
 
   return(
     <>
-    { state.auth.token &&
+    { (Object.keys(state.threads.singleThread).length != 0 && state.auth.token &&
+        state.auth.user.username === state.threads.singleThread.author.username) &&
       (
         <>
-          <Title level={5} style={{textAlign: 'center'}}>Create a new thread</Title>
+          <Title level={5} style={{textAlign: 'center'}}>Edit thread</Title>
           <Form
             name="basic"
             style={{maxWidth: '50%', margin: 'auto'}}
@@ -64,6 +84,10 @@ const ThreadAdd = () => {
             onFinish={handleSubmit}
             onFinishFailed={handleError}
             autoComplete="off"
+            initialValues={{
+              'title': state.threads.singleThread.title,
+              'text': state.threads.singleThread.text
+            }}
           >
             <Form.Item 
               label="Topic"
@@ -84,7 +108,7 @@ const ThreadAdd = () => {
 
             <Form.Item 
               label="Post"
-              name="content"
+              name="text"
               rules={[
                 {
                   required: true,
@@ -95,7 +119,7 @@ const ThreadAdd = () => {
               <TextArea
                 autoSize={{ minRows: 5, maxRows: 15 }}
                 allowClear
-                onChange={e => setContent(e.target.value)}
+                onChange={e => setText(e.target.value)}
               />
             </Form.Item>
             { error && <Text style={{whiteSpace: 'pre-wrap'}} type="danger">{ error }</Text> }
@@ -106,7 +130,7 @@ const ThreadAdd = () => {
                   Submit
                 </Button>
                 {/* Credit: https://stackoverflow.com/questions/65948671/how-to-go-back-to-previous-route-in-react-router-dom-v6 */}
-                <Button danger onClick={() => navigate(-1)}>Cancel</Button>
+                <Button danger onClick={cancelEdit}>Cancel</Button>
               </Space>
             </Form.Item>
 
@@ -116,11 +140,11 @@ const ThreadAdd = () => {
     }
     { !state.auth.token &&
       (
-        <Title style={{textAlign: 'center'}}>Please log in to create a thread</Title>
+        <Title style={{textAlign: 'center'}}>Please log in to edit this thread</Title>
       )
     }
   </>
   )
 };
 
-export default ThreadAdd;
+export default ThreadEdit;
