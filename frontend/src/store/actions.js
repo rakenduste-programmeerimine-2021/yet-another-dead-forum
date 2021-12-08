@@ -2,6 +2,7 @@ export const USER_CREATE = 'USER_CREATE';
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const THREADS_UPDATE = 'THREADS_UPDATE';
+export const THREAD_ADD = 'THREAD_ADD';
 export const POSTS_UPDATE = 'POSTS_UPDATE';
 
 export const createUser = data => ({
@@ -21,6 +22,11 @@ export const logoutUser = () => ({
 export const updateThreads = array => ({
   type: THREADS_UPDATE,
   payload: array
+});
+
+export const addThread = data => ({
+  type: THREAD_ADD,
+  payload: data
 });
 
 export const updatePosts = data => ({

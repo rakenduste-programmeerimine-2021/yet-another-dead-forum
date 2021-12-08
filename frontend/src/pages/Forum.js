@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import { Button, List, Typography } from 'antd';
 import { Context } from '../store';
 import { updateThreads } from '../store/actions';
@@ -22,7 +23,7 @@ const Forum = () => {
       {
         state.auth.token
           ?
-          <Button>Create Thread</Button>
+          <Button href='/thread/add'>Create Thread</Button>
           :
           <Text>You must log in to create a thread</Text>
       }
@@ -37,7 +38,7 @@ const Forum = () => {
             <div style={{ maxWidth: '100%' }}>
               <div><Link to={"/user/" + thread.author.username}>{thread.author.username}</Link>
                 {thread.createdAt &&
-                  <span> Submitted {thread.createdAt}</span>
+                  <span> Submitted {format(new Date(thread.createdAt), 'dd. MMM yyyy')}</span>
                 }
               </div>
               <Link to={"/thread/" + thread.id}><Title level={5} ellipsis>{thread.title}</Title></Link>
