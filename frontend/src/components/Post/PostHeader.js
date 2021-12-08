@@ -36,7 +36,7 @@ const PostHeader = ({ data }) => {
       </div>
       {state.auth.token && (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === data.author.id) &&
         <>
-          <span className="delete" >DELETE</span>
+          <span className="delete">DELETE</span>
           <Link className="edit" to={"/thread/edit/" + data.id}>EDIT</Link>
         </>
       }
