@@ -43,9 +43,9 @@ class RoleControllerTest {
     @DisplayName("List all roles when making GET - /api/roles")
     void getRoles() throws Exception {
         // given
-        Role role1 = new Role(1L, "Test1");
-        Role role2 = new Role(2L, "Test2");
-        Role role3 = new Role(3L, "Test3");
+        Role role1 = new Role(1L, "Test1", "", "");
+        Role role2 = new Role(2L, "Test2", "", "");
+        Role role3 = new Role(3L, "Test3", "", "");
         List<Role> roles = new ArrayList<>();
         roles.add(role1);
         roles.add(role2);
@@ -67,7 +67,7 @@ class RoleControllerTest {
     @DisplayName("Return new role object when creating a new role at POST - /api/role/save")
     void saveRole() throws Exception {
         // given
-        Role role1 = new Role(1L, "SOME_ROLE");
+        Role role1 = new Role(1L, "SOME_ROLE", "#F1F1F1", "#FFFFFF");
         String roleToJson = new ObjectMapper().writeValueAsString(role1);
         when (userService.saveRole(any(Role.class)))
                 .thenReturn(role1);
@@ -82,6 +82,8 @@ class RoleControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is(201))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is("SOME_ROLE")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is("SOME_ROLE")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bodyCss", Matchers.is("#F1F1F1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.textCss", Matchers.is("#FFFFFF")));
     }
 }

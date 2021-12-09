@@ -42,7 +42,7 @@ class UserControllerTest {
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        Role role1 = new Role(1L, "Test1");
+        Role role1 = new Role(1L, "Test1", "", "");
         Collection<Role> roles = Arrays.asList(role1);
         user = new User(1L,
                 "user1",
