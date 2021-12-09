@@ -28,7 +28,7 @@ public class ThreadService implements ThreadServiceInterface {
     private final ThreadRepository threadRepository;
 
     @Override
-    public Thread createThread(AddNewThreadInput form) {
+    public Thread createThread(AddNewThreadInput form, String token) {
         if (form.getTitle() == null || form.getTitle().isEmpty()) {
             throw new BadRequestException("Title field cannot be empty.");
         }
@@ -58,7 +58,7 @@ public class ThreadService implements ThreadServiceInterface {
     }
 
     @Override
-    public void deleteThreadById(Long id) {
+    public void deleteThreadById(Long id, String token) {
         if (id == null) {
             throw new BadRequestException("Cannot delete without the thread ID.");
         }
@@ -72,7 +72,7 @@ public class ThreadService implements ThreadServiceInterface {
     }
 
     @Override
-    public Thread editThread(Thread thread) {
+    public Thread editThread(Thread thread, String token) {
         if (thread.getId() == null) {
             throw new BadRequestException("Field must contain a thread ID");
         }
