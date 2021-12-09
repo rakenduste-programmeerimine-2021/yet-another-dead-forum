@@ -27,7 +27,7 @@ public class PostService implements PostServiceInterface {
     private final ThreadRepository threadRepository;
 
     @Override
-    public Post createPost(AddNewPostInput form) {
+    public Post createPost(AddNewPostInput form, String token) {
         if (form.getText() == null || form.getText().isEmpty()) {
             throw new BadRequestException("Text field cannot be empty.");
         }
@@ -58,7 +58,7 @@ public class PostService implements PostServiceInterface {
     }
 
     @Override
-    public void deletePostById(Long id) {
+    public void deletePostById(Long id, String token) {
         if (id == null) {
             throw new BadRequestException("Cannot delete without the post ID.");
         }
@@ -72,7 +72,7 @@ public class PostService implements PostServiceInterface {
     }
 
     @Override
-    public Post editPost(Post post) {
+    public Post editPost(Post post, String token) {
         log.info(post.getId().toString());
         if (post.getId() == null) {
             throw new BadRequestException("Field must contain a post ID");
