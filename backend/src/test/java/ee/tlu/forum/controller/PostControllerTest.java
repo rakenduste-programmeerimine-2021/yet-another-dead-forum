@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -38,16 +37,13 @@ class PostControllerTest {
     @MockBean
     public PostService postService;
 
+    User user;
+
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(postController).build();
-    }
 
-    @Test
-    @DisplayName("Returns a list of posts at - GET /api/threads")
-    void getPosts() throws Exception {
-        // given
-        User user = new User(1L,
+        user = new User(1L,
                 "user1",
                 "test1@test.com",
                 "aaa",
@@ -55,8 +51,16 @@ class PostControllerTest {
                 "",
                 0L,
                 "",
+                0,
+                0,
                 new ArrayList<>(),
                 new ArrayList<>());
+    }
+
+    @Test
+    @DisplayName("Returns a list of posts at - GET /api/threads")
+    void getPosts() throws Exception {
+        // given
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Post p1 = new Post(1L, "text", user, t1);
 
@@ -77,16 +81,6 @@ class PostControllerTest {
     @DisplayName("Returns a post by ID at - GET /api/thread/{id}")
     void getPostById() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Post p1 = new Post(1L, "text", user, t1);
 
@@ -106,16 +100,6 @@ class PostControllerTest {
     @DisplayName("Returns created post - POST /api/post/add")
     void createPost() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Post p1 = new Post(1L, "text", user, t1);
 
@@ -145,16 +129,6 @@ class PostControllerTest {
     @DisplayName("Returns edited post - PATCH /api/post/edit")
     void editPost() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Post p1 = new Post(1L, "text", user, t1);
 
@@ -182,16 +156,6 @@ class PostControllerTest {
     @DisplayName("Returns a list of posts belonging to a user by user id - GET /api/posts/userid/{id}")
     void getPostsByUserId() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Post p1 = new Post(1L, "text", user, t1);
         Post p2 = new Post(2L, "text", user, t1);
@@ -217,16 +181,6 @@ class PostControllerTest {
     @DisplayName("Returns a list of posts belonging to a user by username - GET /api/posts/username/{username}")
     void getPostsByUsername() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Post p1 = new Post(1L, "text", user, t1);
         Post p2 = new Post(2L, "text", user, t1);

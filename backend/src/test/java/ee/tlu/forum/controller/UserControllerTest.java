@@ -36,28 +36,32 @@ class UserControllerTest {
     @MockBean
     public UserService userService;
 
+    User user;
+
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+
+        Role role1 = new Role(1L, "Test1");
+        Collection<Role> roles = Arrays.asList(role1);
+        user = new User(1L,
+                "user1",
+                "test1@test.com",
+                "aaa",
+                roles,
+                "",
+                999L,
+                "",
+                0,
+                0,
+                new ArrayList<>(),
+                new ArrayList<>());
     }
 
     @Test
     @DisplayName("Returns a list of users - GET /api/users")
     void getUsers() throws Exception {
         //given
-        Role role1 = new Role(1L, "Test1");
-        Collection<Role> roles = Arrays.asList(role1);
-
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                roles,
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
 
         when(userService.getUsers()).thenReturn(Arrays.asList(user));
 
@@ -73,18 +77,6 @@ class UserControllerTest {
     @Test
     @DisplayName("Returns registered user as response at POST - /api/register")
     void registerUser() throws Exception {
-        Role role1 = new Role(1L, "Test1");
-        Collection<Role> roles = Arrays.asList(role1);
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "123123123",
-                roles,
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Map<String, String> form = new HashMap<>();
         form.put("username", "user1");
         form.put("email", "test@test.com");
@@ -111,17 +103,6 @@ class UserControllerTest {
     @Test
     @DisplayName("Returns back the user as response at POST - /api/user/edit")
     void saveUser() throws Exception {
-        // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         String userToJson = new ObjectMapper().writeValueAsString(user);
         when (userService.editUser(any(User.class)))
                 .thenReturn(user);
@@ -143,17 +124,6 @@ class UserControllerTest {
     @DisplayName("Returns a user by ID - GET /api/user/{id}")
     void getUserById() throws Exception {
         //given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
-
         when(userService.getUserById(any())).thenReturn(user);
 
         // when then
@@ -162,7 +132,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("user1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.roles.size()", Matchers.is(0)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.roles.size()", Matchers.is(1)));
     }
 
     @Test
@@ -207,16 +177,6 @@ class UserControllerTest {
     @DisplayName("Returns a test user's visits count - GET /api/{username}/visits")
     void getUserVisitsCount() throws Exception {
         //given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                999L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
 
         when(userService.getUserProfileVisitsCount(any())).thenReturn(user.getVisits());
 
@@ -231,17 +191,6 @@ class UserControllerTest {
     @DisplayName("Returns a user's profile by username - GET /api/user/{username}/profile")
     void getUserProfile() throws Exception {
         //given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
-
         when(userService.getUserProfileByUsername(any())).thenAnswer((User) -> {
             user.setVisits(user.getVisits() + 1);
             return user;
@@ -253,7 +202,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("user1")))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.visits", Matchers.is(1)));
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.visits", Matchers.is(1000)));
     }
 
 }

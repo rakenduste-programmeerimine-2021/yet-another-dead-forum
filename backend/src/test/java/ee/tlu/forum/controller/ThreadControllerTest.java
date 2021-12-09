@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -37,16 +36,13 @@ class ThreadControllerTest {
     @MockBean
     public ThreadService threadService;
 
+    User user;
+
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(threadController).build();
-    }
 
-    @Test
-    @DisplayName("Returns a list of threads at - GET /api/threads")
-    void getThreads() throws Exception {
-        // given
-        User user = new User(1L,
+        user = new User(1L,
                 "user1",
                 "test1@test.com",
                 "aaa",
@@ -54,8 +50,16 @@ class ThreadControllerTest {
                 "",
                 0L,
                 "",
+                0,
+                0,
                 new ArrayList<>(),
                 new ArrayList<>());
+    }
+
+    @Test
+    @DisplayName("Returns a list of threads at - GET /api/threads")
+    void getThreads() throws Exception {
+        // given
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Thread t2 = new Thread(2L, "content2", "title2", user, new ArrayList<>());
 
@@ -76,16 +80,6 @@ class ThreadControllerTest {
     @DisplayName("Returns a thread by ID at - GET /api/threads")
     void getThreadById() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
 
         when (threadService.getThreadById(any()))
@@ -104,16 +98,6 @@ class ThreadControllerTest {
     @DisplayName("Returns created thread - POST /api/thread/add")
     void createThread() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
 
         AddNewThreadInput form = new AddNewThreadInput();
@@ -143,16 +127,6 @@ class ThreadControllerTest {
     @DisplayName("Returns edited thread - PATCH /api/thread/edit")
     void editThread() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
 
         Map<String, String> form = new HashMap<>();
@@ -181,16 +155,6 @@ class ThreadControllerTest {
     @DisplayName("Returns all posts of a thread edited thread - GET /api/thread/{id}/posts")
     void getAllThreadPosts() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Post post1 = new Post(1L, "post text", user, t1);
         Collection<Post> posts = t1.getPosts();
@@ -213,16 +177,6 @@ class ThreadControllerTest {
     @DisplayName("Returns a list of threads belonging to a user by user id - GET /api/threads/userid/{id}")
     void getThreadsByUserId() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Collection<Thread> threads = user.getThreads();
         threads.add(t1);
@@ -244,16 +198,6 @@ class ThreadControllerTest {
     @DisplayName("Returns a list of threads belonging to a user by username - GET /api/threads/username/{name}")
     void getThreadsByUsername() throws Exception {
         // given
-        User user = new User(1L,
-                "user1",
-                "test1@test.com",
-                "aaa",
-                new ArrayList<>(),
-                "",
-                0L,
-                "",
-                new ArrayList<>(),
-                new ArrayList<>());
         Thread t1 = new Thread(1L, "content", "title", user, new ArrayList<>());
         Collection<Thread> threads = user.getThreads();
         threads.add(t1);
