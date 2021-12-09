@@ -24,6 +24,10 @@ public class MaintenanceController {
         return ResponseEntity.ok().body(maintenanceService.getMaintenance());
     }
 
+    @PatchMapping("maintenance/edit")
+    public ResponseEntity<Maintenance> editMaintenance(@RequestBody updateMaintenanceInput message) {
+        return ResponseEntity.ok().body(maintenanceService.updateMaintenance(message.getMessage()));
+    }
 
 
 }
