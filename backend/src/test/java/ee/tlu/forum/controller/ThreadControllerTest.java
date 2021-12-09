@@ -106,7 +106,7 @@ class ThreadControllerTest {
         form.setContent("content");
         String formJson = new ObjectMapper().writeValueAsString(form);
 
-        when (threadService.createThread(any(AddNewThreadInput.class)))
+        when (threadService.createThread(any(AddNewThreadInput.class),any()))
                 .thenReturn(t1);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/thread/add")
@@ -133,7 +133,7 @@ class ThreadControllerTest {
         form.put("title", t1.getTitle());
         String formJson = new ObjectMapper().writeValueAsString(form);
 
-        when (threadService.editThread(any()))
+        when (threadService.editThread(any(),any()))
                 .thenReturn(t1);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/thread/edit")

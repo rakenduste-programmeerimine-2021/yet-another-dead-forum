@@ -104,7 +104,7 @@ class UserControllerTest {
     @DisplayName("Returns back the user as response at POST - /api/user/edit")
     void saveUser() throws Exception {
         String userToJson = new ObjectMapper().writeValueAsString(user);
-        when (userService.editUser(any(User.class)))
+        when (userService.editUser(any(User.class), any()))
                 .thenReturn(user);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/user/edit")
@@ -124,7 +124,7 @@ class UserControllerTest {
     @DisplayName("Returns a user by ID - GET /api/user/{id}")
     void getUserById() throws Exception {
         //given
-        when(userService.getUserById(any())).thenReturn(user);
+        when(userService.getUserById(any(), any())).thenReturn(user);
 
         // when then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/1"))
@@ -191,7 +191,7 @@ class UserControllerTest {
     @DisplayName("Returns a user's profile by username - GET /api/user/{username}/profile")
     void getUserProfile() throws Exception {
         //given
-        when(userService.getUserProfileByUsername(any())).thenAnswer((User) -> {
+        when(userService.getUserProfileByUsername(any(), any())).thenAnswer((User) -> {
             user.setVisits(user.getVisits() + 1);
             return user;
         });
