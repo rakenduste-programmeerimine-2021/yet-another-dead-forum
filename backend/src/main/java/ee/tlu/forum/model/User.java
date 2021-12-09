@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
@@ -51,6 +50,20 @@ public class User extends BaseEntity {
 
     @NotNull
     private String signature = "";
+
+    @Transient
+    private int postAmount;
+
+    @Transient
+    private int threadAmount;
+
+    public int getPostAmount() {
+        return this.posts.size();
+    }
+
+    public int getThreadAmount() {
+        return this.threads.size();
+    }
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
