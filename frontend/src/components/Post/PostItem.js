@@ -22,7 +22,7 @@ const PostItem = ({ post }) => {
             }
           </span>
         </div>
-        <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div style={{display: 'flex', flexDirection: 'column' }}>
           <Text>{post.text}</Text>
         </div>
       </div>

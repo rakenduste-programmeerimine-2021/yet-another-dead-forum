@@ -10,6 +10,8 @@ import Configure from './pages/Configure';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Posts from './pages/Posts';
+import ThreadAdd from './components/Thread/ThreadAdd';
+import ThreadEdit from './components/Thread/ThreadEdit';
 
 function App() {
   const { Header, Content, Footer } = Layout;
@@ -28,6 +30,8 @@ function App() {
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/thread/:id" element={<Posts />} />
+              <Route exact path="/thread/add" element={<ThreadAdd />} />
+              <Route exact path="/thread/edit/:id" element={<ThreadEdit />} />
             </Routes>
           </div>
         </Content>

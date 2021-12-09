@@ -3,12 +3,13 @@ import combineReducers from 'react-combine-reducers';
 import { authReducer, threadReducer, postReducer } from './reducer';
 
 const initialAuth = {
-  token: localStorage.getItem('token'),
-  user: localStorage.getItem('user'),
+  token: JSON.parse(localStorage.getItem('user'))?.token,
+  user: JSON.parse(localStorage.getItem('user')),
 };
 
 const initialThreads = {
-  data: []
+  data: [],
+  singleThread: {}
 }
 
 const initialPosts = {

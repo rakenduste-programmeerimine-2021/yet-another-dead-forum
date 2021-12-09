@@ -25,3 +25,9 @@ html, body {
   height: 100%;
   padding: 20px;
 }
+
+/* Override antDesign - this is necessary so that posts can be displayed on several lines
+   according to where the user wanted the line break to be */
+span.ant-typography {
+  white-space: pre-wrap;
+}
