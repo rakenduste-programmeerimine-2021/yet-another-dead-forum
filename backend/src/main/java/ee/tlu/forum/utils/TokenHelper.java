@@ -22,8 +22,8 @@ public class TokenHelper {
     public DecodedJWT isValid(String token) {
         try {
             return this.decodeToken(token);
-        } catch (JWTVerificationException e) {
-            throw new NoPermissionException("You are forbidden from accessing this endpoint");
+        } catch (Exception e) {
+            throw new NoPermissionException("Forbidden");
         }
     }
 
@@ -33,14 +33,16 @@ public class TokenHelper {
         return verifier.verify(token);
     }
 
-    public boolean hasRole(String token, String role) {
+    public void hasRoleOrUsername(String token, String username, String role) {
+        String throwMessage = "Forbidden";
         DecodedJWT decodedJWT = this.isValid(token);
         String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-        return Arrays.asList(roles).contains(role);
-    }
-
-    public boolean hasUsername(String token, String username) {
-        DecodedJWT decodedJWT = this.isValid(token);
-        return decodedJWT.getSubject().equals(username);
+        if (decodedJWT.getSubject().equals(username) || Arrays.asList(roles).contains(role)) {
+            return;
+        }
+        if (!decodedJWT.getSubject().equals(username)) {
+            throwMessage = "Unauthorized action";
+        }
+        throw new NoPermissionException(throwMessage);
     }
 }
