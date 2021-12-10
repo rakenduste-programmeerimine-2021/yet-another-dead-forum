@@ -24,10 +24,10 @@ public class DonationService implements DonationServiceInterface {
     private final UserRepository userRepository;
 
     public Donation saveDonation(DonationInput donationInput) {
-        Optional<User> user = userRepository.findByUsername(donationInput.getUsername());
+        Optional<User> user = userRepository.findByUsername(donationInput.getUsername().toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("User with username "
-                    + donationInput.getUsername()
+                    + donationInput.getUsername().toLowerCase()
                     + " could not be found");
         }
         Donation donation = new Donation();
