@@ -46,6 +46,7 @@ class UserControllerTest {
         Collection<Role> roles = Arrays.asList(role1);
         user = new User(1L,
                 "user1",
+                "User1",
                 "test1@test.com",
                 "aaa",
                 roles,
