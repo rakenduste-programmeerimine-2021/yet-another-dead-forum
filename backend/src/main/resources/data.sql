@@ -1,12 +1,17 @@
-INSERT INTO public.role(name) VALUES ('ROLE_USER') ON CONFLICT DO NOTHING;
-INSERT INTO public.role(name) VALUES ('ROLE_ADMIN') ON CONFLICT DO NOTHING;
-INSERT INTO public.role(name) VALUES ('ROLE_MODERATOR') ON CONFLICT DO NOTHING;
-INSERT INTO public.role(name) VALUES ('ROLE_PREMIUM') ON CONFLICT DO NOTHING;
+INSERT INTO public.role(name, body_css, text_css) VALUES ('ROLE_USER', '#5D90CB', '#FFFFFF') ON CONFLICT DO NOTHING;
+INSERT INTO public.role(name, body_css, text_css) VALUES ('ROLE_ADMIN', '#C33131', '#FFFFFF') ON CONFLICT DO NOTHING;
+INSERT INTO public.role(name, body_css, text_css) VALUES ('ROLE_MODERATOR', '#3CAD39', '#FFFFFF') ON CONFLICT DO NOTHING;
+INSERT INTO public.role(name, body_css, text_css) VALUES ('ROLE_PREMIUM', '#9C59C1', '#FFFFFF') ON CONFLICT DO NOTHING;
 
 -- username 'Testing', password is 'test'
 INSERT INTO public.users (created_at, updated_at, about, email, password, signature, username, visits) VALUES ('2021-11-20 21:22:36.115454', '2021-11-20 21:22:36.116453', '', 'test@test.com', '$2a$10$xnUvv01NPMsvYQEYINiACOZTADPCoD9N6jjd7LSS4tYoYPZNdmXEG', '', 'Testing', 0) ON CONFLICT DO NOTHING;
 INSERT INTO public.users (created_at, updated_at, about, email, password, signature, username, visits) VALUES ('2021-11-20 21:22:36.115454', '2021-11-20 21:22:36.116453', '', 'foo@test.com', '$2a$10$xnUvv01NPMsvYQEYINiACOZTADPCoD9N6jjd7LSS4tYoYPZNdmXEG', '', 'Foo', 0) ON CONFLICT DO NOTHING;
 INSERT INTO public.users (created_at, updated_at, about, email, password, signature, username, visits) VALUES ('2021-11-20 21:22:36.115454', '2021-11-20 21:22:36.116453', '', 'bar@test.com', '$2a$10$xnUvv01NPMsvYQEYINiACOZTADPCoD9N6jjd7LSS4tYoYPZNdmXEG', '', 'Bar', 0) ON CONFLICT DO NOTHING;
+
+INSERT INTO public.maintenance (id, message)
+SELECT 1, ''
+WHERE NOT EXISTS (SELECT 1 FROM public.maintenance WHERE id = 1)
+ON CONFLICT DO NOTHING;
 
 INSERT INTO public.users_roles (user_id, roles_id)
 SELECT
