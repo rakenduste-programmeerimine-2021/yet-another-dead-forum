@@ -32,19 +32,22 @@ public class PostController {
     }
 
     @PostMapping("/post/add")
-    public ResponseEntity<Post> createPost(@RequestBody AddNewPostInput form) {
+    public ResponseEntity<Post> createPost(@RequestBody AddNewPostInput form, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/post/add").toUriString());
-        return ResponseEntity.created(uri).body(postService.createPost(form));
+        return ResponseEntity.created(uri).body(postService.createPost(form, token));
     }
 
     @PatchMapping("/post/edit")
-    public ResponseEntity<Post> editPost(@RequestBody Post post) {
-        return ResponseEntity.ok().body(postService.editPost(post));
+    public ResponseEntity<Post> editPost(@RequestBody Post post, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        return ResponseEntity.ok().body(postService.editPost(post, token));
     }
 
     @DeleteMapping("/post/delete/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable Long id) {
-        postService.deletePostById(id);
+    public ResponseEntity<?> deletePost(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        postService.deletePostById(id, token);
         return ResponseEntity.ok().build();
     }
 

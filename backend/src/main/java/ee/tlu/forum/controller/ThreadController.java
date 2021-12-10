@@ -34,19 +34,22 @@ public class ThreadController {
     }
 
     @PostMapping("/thread/add")
-    public ResponseEntity<Thread> createThread(@RequestBody AddNewThreadInput form) {
+    public ResponseEntity<Thread> createThread(@RequestBody AddNewThreadInput form, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/thread/add").toUriString());
-        return ResponseEntity.created(uri).body(threadService.createThread(form));
+        return ResponseEntity.created(uri).body(threadService.createThread(form, token));
     }
 
     @PatchMapping("/thread/edit")
-    public ResponseEntity<Thread> editThread(@RequestBody Thread thread) {
-        return ResponseEntity.ok().body(threadService.editThread(thread));
+    public ResponseEntity<Thread> editThread(@RequestBody Thread thread, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        return ResponseEntity.ok().body(threadService.editThread(thread, token));
     }
 
     @DeleteMapping("/thread/delete/{id}")
-    public ResponseEntity<?> deleteThread(@PathVariable Long id) {
-        threadService.deleteThreadById(id);
+    public ResponseEntity<?> deleteThread(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        threadService.deleteThreadById(id, token);
         return ResponseEntity.ok().build();
     }
 

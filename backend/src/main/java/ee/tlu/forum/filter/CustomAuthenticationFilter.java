@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.tlu.forum.service.UserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +34,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private final AuthenticationManager authenticationManager; // authenticates the actual user
 
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
     UserService userService;
+//    Environment environment;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -80,7 +84,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             userService = webApplicationContext.getBean(UserService.class);
         }
 
-        ee.tlu.forum.model.User userInfo = userService.getUserByUsername(user.getUsername());
+        //https://stackoverflow.com/questions/30528255/how-to-access-a-value-defined-in-the-application-properties-file-in-spring-boot
+        // put together this hack by combining answers from above + the previous hack
+        if (jwtSecret == null) {
+            ServletContext servletContext = request.getServletContext();
+            WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            jwtSecret = webApplicationContext.getBean(org.springframework.core.env.Environment.class).getProperty("jwt.secret");
+        }
+
+
+        ee.tlu.forum.model.User userInfo = userService.getUserByUsernameAuthorized(user.getUsername());
 
         List<String> roles = user.getAuthorities()
                 .stream()
@@ -88,7 +101,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .collect(Collectors.toList());
 
         // Algorithm is from the Java JTW library. We input a secret here.
-        Algorithm algorithm = Algorithm.HMAC256("secretmwahahaWahahahahHWhaaaaa".getBytes(StandardCharsets.UTF_8));
+        Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes(StandardCharsets.UTF_8));
         String accessToken = JWT.create()
                 .withSubject(user.getUsername()) // needs a string that's unique to the user so it can identify the user by the specific token
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // expires in 60 minutes

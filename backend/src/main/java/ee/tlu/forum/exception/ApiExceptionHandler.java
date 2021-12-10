@@ -27,16 +27,16 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {AlreadyExistsException.class})
     public ResponseEntity<Object> handleAlreadyExistsException(AlreadyExistsException e) {
-        HttpStatus badRequest = HttpStatus.CONFLICT;
-        ApiException apiException = new ApiException(e.getMessage(),badRequest, ZonedDateTime.now(ZoneId.of("Z")));
-        return new ResponseEntity<>(apiException, badRequest);
+        HttpStatus status = HttpStatus.CONFLICT;
+        ApiException apiException = new ApiException(e.getMessage(),status, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, status);
     }
 
     @ExceptionHandler(value = {NotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(NotFoundException e) {
-        HttpStatus badRequest = HttpStatus.NOT_FOUND;
-        ApiException apiException = new ApiException(e.getMessage(),badRequest, ZonedDateTime.now(ZoneId.of("Z")));
-        return new ResponseEntity<>(apiException, badRequest);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ApiException apiException = new ApiException(e.getMessage(), status, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, status);
     }
     @ExceptionHandler(value = {ConstraintViolationException.class})
     public ResponseEntity<Object> handleRegexValidation(ConstraintViolationException e) {
@@ -44,5 +44,11 @@ public class ApiExceptionHandler {
         String error = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
         ApiException apiException = new ApiException(error,badRequest, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, badRequest);
+    }
+    @ExceptionHandler(value = {NoPermissionException.class})
+    public ResponseEntity<Object> handleNoPermissionException(NoPermissionException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ApiException apiException = new ApiException(e.getMessage(),status, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, status);
     }
 }

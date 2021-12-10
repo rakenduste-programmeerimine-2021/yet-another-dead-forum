@@ -37,24 +37,28 @@ public class UserController {
     }
 
     @PostMapping("/user/edit")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        return ResponseEntity.ok().body(userService.editUser(user));
+    public ResponseEntity<User> saveUser(@RequestBody User user, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        return ResponseEntity.ok().body(userService.editUser(user, token));
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(userService.getUserById(id));
+    public ResponseEntity<User> getUserById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        return ResponseEntity.ok().body(userService.getUserById(id, token));
     }
 
     @DeleteMapping("/user/delete/id/{id}")
-    public ResponseEntity<User> deleteUserById(@PathVariable Long id) {
-        userService.deleteUserById(id);
+    public ResponseEntity<User> deleteUserById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        userService.deleteUserById(id, token);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/user/delete/username/{username}")
-    public ResponseEntity<User> deleteUserByUsername(@PathVariable String username) {
-        userService.deleteUserByUsername(username);
+    public ResponseEntity<User> deleteUserByUsername(@PathVariable String username, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        userService.deleteUserByUsername(username, token);
         return ResponseEntity.ok().build();
     }
 
@@ -73,8 +77,9 @@ public class UserController {
     }
 
     @GetMapping("/user/{username}/profile")
-    public ResponseEntity<User> getUserProfile(@PathVariable String username) {
-        return ResponseEntity.ok().body(userService.getUserProfileByUsername(username));
+    public ResponseEntity<User> getUserProfile(@PathVariable String username, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        return ResponseEntity.ok().body(userService.getUserProfileByUsername(username, token));
     }
 
     @GetMapping("/user/{username}/visits")

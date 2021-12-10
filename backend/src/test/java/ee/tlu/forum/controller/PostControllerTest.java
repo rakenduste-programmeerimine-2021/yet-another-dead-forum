@@ -108,7 +108,7 @@ class PostControllerTest {
         form.setText("text");
         String formJson = new ObjectMapper().writeValueAsString(form);
 
-        when (postService.createPost(any(AddNewPostInput.class)))
+        when (postService.createPost(any(AddNewPostInput.class),any()))
                 .thenReturn(p1);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/post/add")
@@ -136,7 +136,7 @@ class PostControllerTest {
         form.put("title", t1.getTitle());
         String formJson = new ObjectMapper().writeValueAsString(form);
 
-        when (postService.editPost(any()))
+        when (postService.editPost(any(),any()))
                 .thenReturn(p1);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/post/edit")

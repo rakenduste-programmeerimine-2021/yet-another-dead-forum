@@ -27,15 +27,17 @@ public class RoleController {
     }
 
     @PostMapping("/role/save")
-    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
+    public ResponseEntity<Role> saveRole(@RequestBody Role role, @RequestHeader("Authorization") String token) {
         // ServletUriComponentsBuilder.fromCurrentContextPath() - returns current link up to the port (8080)
+        token = token.substring("Bearer ".length());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
+        return ResponseEntity.created(uri).body(userService.saveRole(role, token));
     }
 
     @PostMapping("/role/addtouser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody AddRoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRolename());
+    public ResponseEntity<?> addRoleToUser(@RequestBody AddRoleToUserForm form, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        userService.addRoleToUser(form.getUsername(), form.getRolename(), token);
         return ResponseEntity.ok().build();
     }
 }
