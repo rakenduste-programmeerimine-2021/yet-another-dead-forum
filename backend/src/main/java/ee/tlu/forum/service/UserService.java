@@ -7,6 +7,7 @@ import ee.tlu.forum.model.Role;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.repository.RoleRepository;
 import ee.tlu.forum.repository.UserRepository;
+import ee.tlu.forum.utils.TokenHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,11 +30,13 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final TokenHelper tokenHelper;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, TokenHelper tokenHelper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tokenHelper = tokenHelper;
     }
 
     @Override
@@ -119,7 +122,8 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         user.getRoles().add(role);
     }
     @Override
-    public List<User> getUsers() {
+    public List<User> getUsers(String token) {
+        tokenHelper.hasRole(token, "ROLE_USER");
         log.info("Fetching all users");
         return userRepository.findAll();
     }

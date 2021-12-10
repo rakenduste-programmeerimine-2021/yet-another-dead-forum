@@ -10,7 +10,7 @@ public interface UserServiceInterface{
     User registerUser(User user);
     Role saveRole(Role role, String token);
     void addRoleToUser(String username, String roleName, String token);
-    List<User> getUsers();
+    List<User> getUsers(String token);
     User getUserById(Long id, String token);
     User getUserByUsername(String username, String token);
     User getUserByUsernameAuthorized(String username);

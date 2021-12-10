@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok().body(userService.getUsers());
+    public ResponseEntity<List<User>> getUsers(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok().body(userService.getUsers(token));
     }
 
     @PostMapping("/register")
