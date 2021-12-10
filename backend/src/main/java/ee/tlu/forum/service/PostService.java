@@ -30,7 +30,7 @@ public class PostService implements PostServiceInterface {
 
     @Override
     public Post createPost(AddNewPostInput form, String token) {
-        tokenHelper.hasRoleOrUsername(token, form.getUsername(), "ROLE_USER");
+        tokenHelper.hasRoleOrUsername(token, form.getUsername().toLowerCase(), "ROLE_USER");
         if (form.getText() == null || form.getText().isEmpty()) {
             throw new BadRequestException("Text field cannot be empty.");
         }
@@ -44,9 +44,9 @@ public class PostService implements PostServiceInterface {
             throw new BadRequestException("Content character limit exceeded." +
                     " Maximum: 1024 characters. You have: " + form.getText().length());
         }
-        Optional<User> user = userRepository.findByUsername(form.getUsername());
+        Optional<User> user = userRepository.findByUsername(form.getUsername().toLowerCase());
         if (user.isEmpty()) {
-            throw new NotFoundException("User with username " + form.getUsername() + " was not found.");
+            throw new NotFoundException("User with username " + form.getUsername().toLowerCase() + " was not found.");
         }
         Optional<Thread> thread = threadRepository.findById(form.getThreadId());
         if (thread.isEmpty()) {
@@ -56,7 +56,7 @@ public class PostService implements PostServiceInterface {
         post.setAuthor(user.get());
         post.setText(form.getText());
         post.setThread(thread.get());
-        log.info("Creating new post by " + user.get().getUsername());
+        log.info("Creating new post by " + user.get().getUsername().toLowerCase());
         return postRepository.save(post);
     }
 
@@ -85,7 +85,7 @@ public class PostService implements PostServiceInterface {
             throw new NotFoundException("Post with ID " + post.getId() + " does not exist");
         }
 
-        tokenHelper.hasRoleOrUsername(token, postOptional.get().getAuthor().getUsername(), "ROLE_ADMIN");
+        tokenHelper.hasRoleOrUsername(token, postOptional.get().getAuthor().getUsername().toLowerCase(), "ROLE_ADMIN");
 
         if (post.getText() != null) {
             if (post.getText().length() == 0) {
@@ -125,7 +125,7 @@ public class PostService implements PostServiceInterface {
         if (username == null || username.isEmpty()) {
             throw new BadRequestException("Cannot get posts without username.");
         }
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("No user with username " + username + " exists.");
         }

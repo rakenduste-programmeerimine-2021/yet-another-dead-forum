@@ -27,6 +27,9 @@ public class User extends BaseEntity {
     private String username;
 
     @NotNull
+    private String displayName;
+
+    @NotNull
     @Column(unique = true)
     // regex from here https://www.baeldung.com/java-email-validation-regex
     @Pattern(regexp = "[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."

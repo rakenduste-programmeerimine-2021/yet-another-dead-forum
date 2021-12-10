@@ -31,7 +31,7 @@ public class ThreadService implements ThreadServiceInterface {
 
     @Override
     public Thread createThread(AddNewThreadInput form, String token) {
-        tokenHelper.hasRoleOrUsername(token, form.getUsername(), "ROLE_USER");
+        tokenHelper.hasRoleOrUsername(token, form.getUsername().toLowerCase(), "ROLE_USER");
         if (form.getTitle() == null || form.getTitle().isEmpty()) {
             throw new BadRequestException("Title field cannot be empty.");
         }
@@ -49,9 +49,9 @@ public class ThreadService implements ThreadServiceInterface {
             throw new BadRequestException("Content character limit exceeded." +
                     " Maximum: 3096 characters. You have: " + form.getContent().length());
         }
-        Optional<User> user = userRepository.findByUsername(form.getUsername());
+        Optional<User> user = userRepository.findByUsername(form.getUsername().toLowerCase());
         if (user.isEmpty()) {
-            throw new NotFoundException("User " + form.getUsername() + " not found");
+            throw new NotFoundException("User " + form.getUsername().toLowerCase() + " not found");
         }
         Thread thread = new Thread();
         thread.setTitle(form.getTitle());
@@ -84,7 +84,7 @@ public class ThreadService implements ThreadServiceInterface {
             throw new NotFoundException("Thread with ID " + thread.getId() + " does not exist");
         }
 
-        tokenHelper.hasRoleOrUsername(token, threadOptional.get().getAuthor().getUsername(), "ROLE_ADMIN");
+        tokenHelper.hasRoleOrUsername(token, threadOptional.get().getAuthor().getUsername().toLowerCase(), "ROLE_ADMIN");
 
         if (thread.getText() != null) {
             if (thread.getText().length() == 0) {
@@ -158,7 +158,7 @@ public class ThreadService implements ThreadServiceInterface {
         if (username == null || username.isEmpty()) {
             throw new BadRequestException("Cannot get threads without username.");
         }
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("No user with username " + username + " exists.");
         }
