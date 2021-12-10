@@ -24,7 +24,8 @@ const ThreadAdd = () => {
     const res = await fetch('http://localhost:8080/api/thread/add', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + state.auth.token
       },
       body: JSON.stringify(threadData),
     })
