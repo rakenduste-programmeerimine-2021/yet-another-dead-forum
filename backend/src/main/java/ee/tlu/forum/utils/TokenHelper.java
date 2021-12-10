@@ -5,6 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import ee.tlu.forum.exception.BadRequestException;
+import ee.tlu.forum.exception.NoPermissionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +19,11 @@ public class TokenHelper {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    public boolean isValid(String token) {
+    public DecodedJWT isValid(String token) {
         try {
-            this.decodeToken(token);
-            return true;
+            return this.decodeToken(token);
         } catch (JWTVerificationException e) {
-            return false;
+            throw new NoPermissionException("You are forbidden from accessing this endpoint");
         }
     }
 
@@ -33,13 +34,13 @@ public class TokenHelper {
     }
 
     public boolean hasRole(String token, String role) {
-        DecodedJWT decodedJWT = this.decodeToken(token);
+        DecodedJWT decodedJWT = this.isValid(token);
         String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
         return Arrays.asList(roles).contains(role);
     }
 
     public boolean hasUsername(String token, String username) {
-        DecodedJWT decodedJWT = this.decodeToken(token);
+        DecodedJWT decodedJWT = this.isValid(token);
         return decodedJWT.getSubject().equals(username);
     }
 }
