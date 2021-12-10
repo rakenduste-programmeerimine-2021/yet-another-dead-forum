@@ -69,7 +69,7 @@ class RoleControllerTest {
         // given
         Role role1 = new Role(1L, "SOME_ROLE", "#F1F1F1", "#FFFFFF");
         String roleToJson = new ObjectMapper().writeValueAsString(role1);
-        when (userService.saveRole(any(Role.class), any()))
+        when (userService.saveRole(any(Role.class)))
                 .thenReturn(role1);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/role/save")
