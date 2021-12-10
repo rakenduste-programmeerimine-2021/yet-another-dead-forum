@@ -7,6 +7,7 @@ import ee.tlu.forum.model.Role;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.repository.RoleRepository;
 import ee.tlu.forum.repository.UserRepository;
+import ee.tlu.forum.utils.TokenHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,16 +30,18 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final TokenHelper tokenHelper;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, TokenHelper tokenHelper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tokenHelper = tokenHelper;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
            log.error("User {} not found", username);
            throw new UsernameNotFoundException("User " + username + " not found");
@@ -47,25 +50,26 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.get().getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.get().getUsername().toLowerCase(), user.get().getPassword(), authorities);
         // return spring security's User class location to not mix up with the forum's own User class.
     }
 
     @Override
     public User editUser(User user, String token) {
+        tokenHelper.hasRoleOrUsername(token, user.getUsername().toLowerCase(), "ROLE_ADMIN");
         if (user.getId() == null) {
             throw new BadRequestException("You must specify an ID for the user");
         }
         if (userRepository.findById(user.getId()).isEmpty()) {
             throw new NotFoundException("The user with id: " + user.getId() + " does not exist");
         }
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new AlreadyExistsException("Username " + user.getUsername() + " is already taken");
+        if (userRepository.findByUsername(user.getUsername().toLowerCase()).isPresent()) {
+            throw new AlreadyExistsException("Username " + user.getUsername().toLowerCase() + " is already taken");
         }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new AlreadyExistsException("E-mail " + user.getEmail() + " is already in use");
         }
-        log.info("Saving new user - " + user.getUsername());
+        log.info("Saving new user - " + user.getUsername().toLowerCase());
         return userRepository.save(user);
     }
 
@@ -80,15 +84,17 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         if (user.getPassword() == null || user.getPassword().length() < 6) {
             throw new BadRequestException("Password must be at least 6 characters long.");
         }
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new AlreadyExistsException("Username " + user.getUsername() + " is already taken.");
+        if (userRepository.findByUsername(user.getUsername().toLowerCase()).isPresent()) {
+            throw new AlreadyExistsException("Username " + user.getUsername().toLowerCase() + " is already taken.");
         }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new AlreadyExistsException("E-mail " + user.getEmail() + " is already in use.");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        log.info("Saving new user - " + user.getUsername());
+        log.info("Saving new user - " + user.getUsername().toLowerCase());
         Role role = roleRepository.findByName("ROLE_USER").get();
+        user.setDisplayName(user.getUsername());
+        user.setUsername(user.getUsername().toLowerCase());
         User newUser = userRepository.save(user);
         newUser.getRoles().add(role);
         return newUser;
@@ -97,7 +103,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
 
     @Override
-    public Role saveRole(Role role, String token) {
+    public Role saveRole(Role role) {
         log.info("Saving new role - " + role.getName());
         if (roleRepository.findByName(role.getName()).isPresent()) {
             throw new AlreadyExistsException("A role with the name " + role.getName() + " already exists.");
@@ -106,14 +112,14 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName, String token) {
-        if (userRepository.findByUsername(username).isEmpty()) {
+    public void addRoleToUser(String username, String roleName) {
+        if (userRepository.findByUsername(username.toLowerCase()).isEmpty()) {
             throw new NotFoundException("User does not exist.");
         }
         if (roleRepository.findByName(roleName).isEmpty()) {
             throw new NotFoundException("Role does not exist.");
         }
-        User user = userRepository.findByUsername(username).get();
+        User user = userRepository.findByUsername(username.toLowerCase()).get();
         Role role = roleRepository.findByName(roleName).get();
         log.info("Adding role {} to user {}", roleName, username);
         user.getRoles().add(role);
@@ -130,30 +136,18 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public User getUserById(Long id, String token) {
-        if (userRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("User does not exist");
-        }
+    public User getUserById(Long id) {
         log.info("Fetching user with id {}", id);
         return userRepository.getById(id);
     }
 
     @Override
-    public User getUserByUsername(String username, String token) {
-        if (userRepository.findByUsername(username).isEmpty()) {
+    public User getUserByUsername(String username) {
+        if (userRepository.findByUsername(username.toLowerCase()).isEmpty()) {
             throw new NotFoundException("Username does not exist");
         }
         log.info("Fetching user with username {}", username);
-        return userRepository.findByUsername(username).get();
-    }
-
-    @Override
-    public User getUserByUsernameAuthorized(String username) {
-        if (userRepository.findByUsername(username).isEmpty()) {
-            throw new NotFoundException("Username does not exist");
-        }
-        log.info("Fetching user with username {}", username);
-        return userRepository.findByUsername(username).get();
+        return userRepository.findByUsername(username.toLowerCase()).get();
     }
 
     @Override
@@ -161,7 +155,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         if (username == null) {
             throw new BadRequestException("Cannot get post count without username.");
         }
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("No user with username " + username + " exists.");
         }
@@ -173,7 +167,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         if (username == null) {
             throw new BadRequestException("Cannot get thread count without username.");
         }
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("No user with username " + username + " exists.");
         }
@@ -181,15 +175,15 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public User getUserProfileByUsername(String username, String token) {
-        User user = getUserByUsernameAuthorized(username);
+    public User getUserProfileByUsername(String username) {
+        User user = getUserByUsername(username.toLowerCase());
         user.setVisits(user.getVisits() + 1);
         return user;
     }
 
     @Override
     public Long getUserProfileVisitsCount(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("Username does not exist");
         }
@@ -198,7 +192,7 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public void deleteUserById(Long id, String token) {
+    public void deleteUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new NotFoundException("User with ID " + id + " does not exist");
@@ -208,8 +202,8 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     }
 
     @Override
-    public void deleteUserByUsername(String username, String token) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public void deleteUserByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("Username does not exist");
         }

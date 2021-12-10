@@ -9,6 +9,7 @@ import ee.tlu.forum.model.User;
 import ee.tlu.forum.model.input.AddNewThreadInput;
 import ee.tlu.forum.repository.ThreadRepository;
 import ee.tlu.forum.repository.UserRepository;
+import ee.tlu.forum.utils.TokenHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,11 @@ public class ThreadService implements ThreadServiceInterface {
 
     private final UserRepository userRepository;
     private final ThreadRepository threadRepository;
+    private final TokenHelper tokenHelper;
 
     @Override
     public Thread createThread(AddNewThreadInput form, String token) {
+        tokenHelper.hasRoleOrUsername(token, form.getUsername().toLowerCase(), "ROLE_USER");
         if (form.getTitle() == null || form.getTitle().isEmpty()) {
             throw new BadRequestException("Title field cannot be empty.");
         }
@@ -46,9 +49,9 @@ public class ThreadService implements ThreadServiceInterface {
             throw new BadRequestException("Content character limit exceeded." +
                     " Maximum: 3096 characters. You have: " + form.getContent().length());
         }
-        Optional<User> user = userRepository.findByUsername(form.getUsername());
+        Optional<User> user = userRepository.findByUsername(form.getUsername().toLowerCase());
         if (user.isEmpty()) {
-            throw new NotFoundException("User " + form.getUsername() + " not found");
+            throw new NotFoundException("User " + form.getUsername().toLowerCase() + " not found");
         }
         Thread thread = new Thread();
         thread.setTitle(form.getTitle());
@@ -58,7 +61,7 @@ public class ThreadService implements ThreadServiceInterface {
     }
 
     @Override
-    public void deleteThreadById(Long id, String token) {
+    public void deleteThreadById(Long id) {
         if (id == null) {
             throw new BadRequestException("Cannot delete without the thread ID.");
         }
@@ -80,6 +83,9 @@ public class ThreadService implements ThreadServiceInterface {
         if (threadOptional.isEmpty()) {
             throw new NotFoundException("Thread with ID " + thread.getId() + " does not exist");
         }
+
+        tokenHelper.hasRoleOrUsername(token, threadOptional.get().getAuthor().getUsername().toLowerCase(), "ROLE_ADMIN");
+
         if (thread.getText() != null) {
             if (thread.getText().length() == 0) {
                 throw new BadRequestException("Text field cannot be empty!");
@@ -152,7 +158,7 @@ public class ThreadService implements ThreadServiceInterface {
         if (username == null || username.isEmpty()) {
             throw new BadRequestException("Cannot get threads without username.");
         }
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username.toLowerCase());
         if (user.isEmpty()) {
             throw new NotFoundException("No user with username " + username + " exists.");
         }

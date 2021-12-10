@@ -45,6 +45,7 @@ class PostControllerTest {
 
         user = new User(1L,
                 "user1",
+                "User1",
                 "test1@test.com",
                 "aaa",
                 new ArrayList<>(),

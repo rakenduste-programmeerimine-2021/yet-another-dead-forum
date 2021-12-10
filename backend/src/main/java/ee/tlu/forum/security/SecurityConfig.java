@@ -46,14 +46,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().
                 antMatchers(AUTH_WHITELIST).permitAll();
 
-        // allow only certain roles access to these endpoints
-        http.authorizeRequests().antMatchers(GET, "/api/users/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(GET, "/api/user/*").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+        // UserController
+        http.authorizeRequests().antMatchers("/api/user/delete/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/api/user/edit/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/users/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/user/**").hasAnyAuthority("ROLE_USER");
 
-        // allow every URL to every non-logged in user
+        // RoleController
+        http.authorizeRequests().antMatchers(GET, "/api/roles/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/role/**").hasAnyAuthority("ROLE_ADMIN");
+
+        // ThreadController
+        http.authorizeRequests().antMatchers("/api/thread/delete/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR");
+        http.authorizeRequests().antMatchers("/api/thread/add/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/thread/edit/**").hasAnyAuthority("ROLE_USER");
+
+        // PostController
+        http.authorizeRequests().antMatchers("/api/post/delete/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR");
+        http.authorizeRequests().antMatchers("/api/post/add/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/post/edit/**").hasAnyAuthority("ROLE_USER");
+
+        // MaintenanceController
+        http.authorizeRequests().antMatchers("/api/maintenance/edit/**").hasAnyAuthority("ROLE_ADMIN");
+
+        // allow every other URL to every non-logged in user
         http.authorizeRequests().antMatchers("/api/**").permitAll();
-        http.authorizeRequests().antMatchers("/api/roles").permitAll();
 
         http.authorizeRequests().anyRequest().authenticated(); // need to be authenticated
 

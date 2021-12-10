@@ -57,7 +57,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             log.error("Something went wrong! " + e);
         }
 
-        String username = loginInfo.getUsername();
+        String username = loginInfo.getUsername().toLowerCase();
         String password = loginInfo.getPassword();
         log.info("Authentication attempt, Username: {}, Password: {}", username, password);
 
@@ -92,8 +92,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             jwtSecret = webApplicationContext.getBean(org.springframework.core.env.Environment.class).getProperty("jwt.secret");
         }
 
-
-        ee.tlu.forum.model.User userInfo = userService.getUserByUsernameAuthorized(user.getUsername());
+        ee.tlu.forum.model.User userInfo = userService.getUserByUsername(user.getUsername().toLowerCase());
 
         List<String> roles = user.getAuthorities()
                 .stream()
@@ -113,7 +112,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, String> tokens = new HashMap<>();
         tokens.put("token", accessToken);
         tokens.put("id", String.valueOf(userInfo.getId()));
-        tokens.put("username", userInfo.getUsername());
+        tokens.put("username", userInfo.getUsername().toLowerCase());
+        tokens.put("displayName", userInfo.getDisplayName());
         tokens.put("roles", roles.toString());
         tokens.put("email", userInfo.getEmail());
         tokens.put("about", userInfo.getEmail());
