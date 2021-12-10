@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PostServiceInterface {
     Post createPost(AddNewPostInput form, String token);
-    void deletePostById(Long id, String token);
+    void deletePostById(Long i);
     Post editPost (Post form, String token);
     List<Post> getAllPosts();
     Post getPostById(Long id);

@@ -92,8 +92,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             jwtSecret = webApplicationContext.getBean(org.springframework.core.env.Environment.class).getProperty("jwt.secret");
         }
 
-
-        ee.tlu.forum.model.User userInfo = userService.getUserByUsernameAuthorized(user.getUsername());
+        ee.tlu.forum.model.User userInfo = userService.getUserByUsername(user.getUsername());
 
         List<String> roles = user.getAuthorities()
                 .stream()

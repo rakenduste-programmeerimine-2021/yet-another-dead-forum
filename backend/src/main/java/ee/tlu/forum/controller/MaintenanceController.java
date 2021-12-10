@@ -25,9 +25,8 @@ public class MaintenanceController {
     }
 
     @PatchMapping("maintenance/edit")
-    public ResponseEntity<Maintenance> editMaintenance(@RequestBody updateMaintenanceInput message, @RequestHeader("Authorization") String token) {
-        token = token.substring("Bearer ".length());
-        return ResponseEntity.ok().body(maintenanceService.updateMaintenance(message.getMessage(), token));
+    public ResponseEntity<Maintenance> editMaintenance(@RequestBody updateMaintenanceInput message) {
+        return ResponseEntity.ok().body(maintenanceService.updateMaintenance(message.getMessage()));
     }
 
 

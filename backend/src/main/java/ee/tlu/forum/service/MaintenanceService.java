@@ -19,7 +19,7 @@ public class MaintenanceService implements MaintenanceServiceInterface {
     }
 
     @Override
-    public Maintenance updateMaintenance(String message, String token) {
+    public Maintenance updateMaintenance(String message) {
         Maintenance maintenance = maintenanceRepository.findById(1L).get();
         if (maintenanceRepository.findById(1L).isEmpty()) {
             throw new BadRequestException("Catastrophic failure. This is not supposed to happen!");

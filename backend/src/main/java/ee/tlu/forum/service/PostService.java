@@ -9,6 +9,7 @@ import ee.tlu.forum.model.input.AddNewPostInput;
 import ee.tlu.forum.repository.PostRepository;
 import ee.tlu.forum.repository.ThreadRepository;
 import ee.tlu.forum.repository.UserRepository;
+import ee.tlu.forum.utils.TokenHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,11 @@ public class PostService implements PostServiceInterface {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ThreadRepository threadRepository;
+    private final TokenHelper tokenHelper;
 
     @Override
     public Post createPost(AddNewPostInput form, String token) {
+        tokenHelper.hasRoleOrUsername(token, form.getUsername(), "ROLE_USER");
         if (form.getText() == null || form.getText().isEmpty()) {
             throw new BadRequestException("Text field cannot be empty.");
         }
@@ -58,7 +61,7 @@ public class PostService implements PostServiceInterface {
     }
 
     @Override
-    public void deletePostById(Long id, String token) {
+    public void deletePostById(Long id) {
         if (id == null) {
             throw new BadRequestException("Cannot delete without the post ID.");
         }
@@ -81,6 +84,9 @@ public class PostService implements PostServiceInterface {
         if (postOptional.isEmpty()) {
             throw new NotFoundException("Post with ID " + post.getId() + " does not exist");
         }
+
+        tokenHelper.hasRoleOrUsername(token, postOptional.get().getAuthor().getUsername(), "ROLE_ADMIN");
+
         if (post.getText() != null) {
             if (post.getText().length() == 0) {
                 throw new BadRequestException("Text field cannot be empty!");

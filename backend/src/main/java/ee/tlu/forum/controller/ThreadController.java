@@ -47,9 +47,8 @@ public class ThreadController {
     }
 
     @DeleteMapping("/thread/delete/{id}")
-    public ResponseEntity<?> deleteThread(@PathVariable Long id, @RequestHeader("Authorization") String token) {
-        token = token.substring("Bearer ".length());
-        threadService.deleteThreadById(id, token);
+    public ResponseEntity<?> deleteThread(@PathVariable Long id) {
+        threadService.deleteThreadById(id);
         return ResponseEntity.ok().build();
     }
 

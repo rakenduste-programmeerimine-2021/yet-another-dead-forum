@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ThreadServiceInterface {
     Thread createThread(AddNewThreadInput form, String token);
-    void deleteThreadById(Long id, String token);
+    void deleteThreadById(Long id);
     Thread editThread (Thread thread, String token);
     List<Thread> getAllThreads();
     Thread getThreadById(Long id);
