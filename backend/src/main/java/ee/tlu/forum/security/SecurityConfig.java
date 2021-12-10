@@ -47,8 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers(AUTH_WHITELIST).permitAll();
 
         // UserController
-        http.authorizeRequests().antMatchers("/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers("/api/user/delete/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/api/user/edit/**").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers("/api/users/**").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers("/api/user/**").hasAnyAuthority("ROLE_USER");
 
