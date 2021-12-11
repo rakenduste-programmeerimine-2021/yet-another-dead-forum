@@ -64,6 +64,7 @@ const threadReducer = (state, action) => {
       return {
         ...state,
         data: [
+          // Credit: https://stackoverflow.com/a/34582848
           ...state.data.slice(0, state.data.indexOf(action.payload)),
           ...state.data.slice(state.data.indexOf(action.payload) + 1)
         ]
