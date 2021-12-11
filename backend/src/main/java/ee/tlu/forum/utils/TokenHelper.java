@@ -19,30 +19,35 @@ public class TokenHelper {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    public DecodedJWT isValid(String token) {
+    public DecodedJWT decodeToken(String token) {
         try {
-            return this.decodeToken(token);
+            Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes(StandardCharsets.UTF_8));
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            return verifier.verify(token);
         } catch (Exception e) {
-            throw new NoPermissionException("Forbidden");
+            throw new NoPermissionException("Invalid credentials");
         }
     }
 
-    public DecodedJWT decodeToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        return verifier.verify(token);
-    }
-
-    public void hasRoleOrUsername(String token, String username, String role) {
+    public void hasRoleOrUsername(String token, String username, String[] requiredRoles) {
         String throwMessage = "Forbidden";
-        DecodedJWT decodedJWT = this.isValid(token);
+        DecodedJWT decodedJWT = this.decodeToken(token);
         String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-        if (decodedJWT.getSubject().equals(username) || Arrays.asList(roles).contains(role)) {
+        if (decodedJWT.getSubject().equals(username) || this.hasAnyRole(requiredRoles, roles)) {
             return;
         }
         if (!decodedJWT.getSubject().equals(username)) {
             throwMessage = "Unauthorized action";
         }
         throw new NoPermissionException(throwMessage);
+    }
+
+    public boolean hasAnyRole(String[] requiredRoles, String[] givenRoles) {
+        for (String required : requiredRoles) {
+            if (Arrays.asList(givenRoles).contains(required)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
