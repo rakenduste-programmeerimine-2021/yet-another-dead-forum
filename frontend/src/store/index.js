@@ -3,6 +3,7 @@ import combineReducers from 'react-combine-reducers';
 import AuthReducer from './AuthReducer';
 import ThreadReducer from './ThreadReducer';
 import PostReducer from './PostReducer';
+import PageReducer from './PageReducer';
 
 const initialAuth = {
   token: JSON.parse(localStorage.getItem('user'))?.token,
@@ -18,10 +19,15 @@ const initialPosts = {
   data: []
 }
 
+const initialPage = {
+  current: 'forum'
+}
+
 const [combinedReducer, initialState] = combineReducers({
   auth: [AuthReducer, initialAuth],
   threads: [ThreadReducer, initialThreads],
-  posts: [PostReducer, initialPosts]
+  posts: [PostReducer, initialPosts],
+  page: [PageReducer, initialPage]
 });
 
 export const Context = createContext(initialState);
