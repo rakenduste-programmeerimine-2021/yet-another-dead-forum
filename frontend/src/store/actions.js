@@ -5,6 +5,7 @@ export const THREADS_UPDATE = 'THREADS_UPDATE';
 export const THREAD_UPDATE = 'THREAD_UPDATE';
 export const THREAD_ADD = 'THREAD_ADD';
 export const THREAD_EDIT = 'THREAD_EDIT';
+export const THREAD_DELETE = 'THREAD_DELETE';
 export const THREAD_RESET = 'THREAD_RESET';
 export const POSTS_UPDATE = 'POSTS_UPDATE';
 
@@ -39,6 +40,11 @@ export const addThread = data => ({
 
 export const editThread = data => ({
   type: THREAD_EDIT,
+  payload: data
+});
+
+export const deleteThread = data => ({
+  type: THREAD_DELETE,
   payload: data
 });
 

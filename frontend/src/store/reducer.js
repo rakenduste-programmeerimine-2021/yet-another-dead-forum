@@ -6,6 +6,7 @@ import {
   THREAD_UPDATE,
   THREAD_ADD,
   THREAD_EDIT,
+  THREAD_DELETE,
   THREAD_RESET,
   POSTS_UPDATE
 } from './actions';
@@ -58,6 +59,14 @@ const threadReducer = (state, action) => {
       return {
         ...state,
         singleThread: action.payload
+      }
+    case THREAD_DELETE:
+      return {
+        ...state,
+        data: [
+          ...state.data.slice(0, state.data.indexOf(action.payload)),
+          ...state.data.slice(state.data.indexOf(action.payload) + 1)
+        ]
       }
     case THREAD_RESET:
       return {
