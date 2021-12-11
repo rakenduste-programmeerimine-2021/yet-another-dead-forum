@@ -1,9 +1,7 @@
 package ee.tlu.forum.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import ee.tlu.forum.utils.RoleHelper;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,9 +9,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Role {
+
+    public Role(Long id, String name, String bodyCss, String textCss) {
+        this.id = id;
+        this.name = name;
+        this.bodyCss = bodyCss;
+        this.textCss = textCss;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +32,14 @@ public class Role {
 
     @NotNull
     private String textCss = "#FFFFFF";
+
+    @Transient
+    private String displayName;
+
+    public String getDisplayName() {
+        return RoleHelper.toDisplayName(this.name);
+    }
+
+
+
 }
