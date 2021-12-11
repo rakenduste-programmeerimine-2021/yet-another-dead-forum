@@ -56,7 +56,8 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public User editUser(User user, String token) {
-        tokenHelper.hasRoleOrUsername(token, user.getUsername().toLowerCase(), "ROLE_ADMIN");
+        String[] allowedRoles = {"ROLE_ADMIN"};
+        tokenHelper.hasRoleOrUsername(token, user.getUsername().toLowerCase(), allowedRoles);
         if (user.getId() == null) {
             throw new BadRequestException("You must specify an ID for the user");
         }

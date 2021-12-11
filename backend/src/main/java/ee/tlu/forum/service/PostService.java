@@ -30,7 +30,8 @@ public class PostService implements PostServiceInterface {
 
     @Override
     public Post createPost(AddNewPostInput form, String token) {
-        tokenHelper.hasRoleOrUsername(token, form.getUsername().toLowerCase(), "ROLE_USER");
+        String[] allowedRoles = {"ROLE_USER"};
+        tokenHelper.hasRoleOrUsername(token, form.getUsername().toLowerCase(), allowedRoles);
         if (form.getText() == null || form.getText().isEmpty()) {
             throw new BadRequestException("Text field cannot be empty.");
         }
@@ -85,7 +86,8 @@ public class PostService implements PostServiceInterface {
             throw new NotFoundException("Post with ID " + post.getId() + " does not exist");
         }
 
-        tokenHelper.hasRoleOrUsername(token, postOptional.get().getAuthor().getUsername().toLowerCase(), "ROLE_ADMIN");
+        String[] allowedRoles = {"ROLE_ADMIN", "ROLE_MODERATOR"};
+        tokenHelper.hasRoleOrUsername(token, postOptional.get().getAuthor().getUsername().toLowerCase(), allowedRoles);
 
         if (post.getText() != null) {
             if (post.getText().length() == 0) {
