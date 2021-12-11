@@ -4,8 +4,10 @@
 
 .delete {
   padding: 0 20px 0 0;
-  color: rgb(216, 0, 0);
+
   cursor: pointer;
+
+  color: rgb(216, 0, 0);
   transition: color 0.3s;
 }
 
