@@ -5,8 +5,10 @@ export const THREADS_UPDATE = 'THREADS_UPDATE';
 export const THREAD_UPDATE = 'THREAD_UPDATE';
 export const THREAD_ADD = 'THREAD_ADD';
 export const THREAD_EDIT = 'THREAD_EDIT';
+export const THREAD_DELETE = 'THREAD_DELETE';
 export const THREAD_RESET = 'THREAD_RESET';
 export const POSTS_UPDATE = 'POSTS_UPDATE';
+export const PAGE_UPDATE = 'PAGE_UPDATE';
 
 export const createUser = data => ({
   type: USER_CREATE,
@@ -42,11 +44,21 @@ export const editThread = data => ({
   payload: data
 });
 
+export const deleteThread = data => ({
+  type: THREAD_DELETE,
+  payload: data
+});
+
 export const resetSingleThread = () => ({
   type: THREAD_RESET
 });
 
 export const updatePosts = data => ({
   type: POSTS_UPDATE,
+  payload: data
+});
+
+export const updatePage = data => ({
+  type: PAGE_UPDATE,
   payload: data
 });

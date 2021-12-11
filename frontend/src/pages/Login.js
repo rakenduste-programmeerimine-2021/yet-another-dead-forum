@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography } from 'antd';
 import { Context } from '../store';
-import { loginUser } from '../store/actions';
+import { loginUser, updatePage } from '../store/actions';
 
 const Login = () => {
   const [userName, setUsername] = useState('');
@@ -31,6 +31,7 @@ const Login = () => {
 
     if(returnData.token) {
       dispatch(loginUser(returnData));
+      dispatch(updatePage('forum'));
       navigate('/', { replace: true });
     } else {
       let errors = ''

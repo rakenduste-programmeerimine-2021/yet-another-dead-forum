@@ -25,11 +25,7 @@ const ThreadEdit = () => {
 
   const handleSubmit = async () => {
     const threadData = {
-      ...state.threads.singleThread,
-      author: {
-        ...state.threads.singleThread.author,
-        username: state.auth.user.username,
-      },
+      id: params.id,
       title: title ? title : state.threads.singleThread.title,
       text: text ? text : state.threads.singleThread.text,
       updatedAt: new Date()
@@ -38,7 +34,8 @@ const ThreadEdit = () => {
     const res = await fetch('http://localhost:8080/api/thread/edit', {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + state.auth.token
       },
       body: JSON.stringify(threadData),
     })
@@ -73,7 +70,8 @@ const ThreadEdit = () => {
   return(
     <>
     { (Object.keys(state.threads.singleThread).length != 0 && state.auth.token &&
-        state.auth.user.username === state.threads.singleThread.author.username) &&
+        (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || 
+          parseInt(state.auth.user.id) === state.threads.singleThread.author.id)) &&
       (
         <>
           <Title level={5} style={{textAlign: 'center'}}>Edit thread</Title>

@@ -1,8 +1,20 @@
+.edit-delete {
+  padding-left: 20px;
+}
+
 .delete {
-  padding: 0 20px;
-  color: red;
+  padding: 0 20px 0 0;
+
+  cursor: pointer;
+
+  color: rgb(216, 0, 0);
+  transition: color 0.3s;
+}
+
+.delete:hover {
+  color: rgb(255, 125, 92);
 }
 
 .edit {
-  color: blue;
+  color: rgb(0, 52, 165);
 }
