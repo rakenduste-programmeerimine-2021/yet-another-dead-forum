@@ -1,6 +1,8 @@
 import { createContext, useReducer } from 'react';
 import combineReducers from 'react-combine-reducers';
-import { authReducer, threadReducer, postReducer } from './reducer';
+import AuthReducer from './AuthReducer';
+import ThreadReducer from './ThreadReducer';
+import PostReducer from './PostReducer';
 
 const initialAuth = {
   token: JSON.parse(localStorage.getItem('user'))?.token,
@@ -17,9 +19,9 @@ const initialPosts = {
 }
 
 const [combinedReducer, initialState] = combineReducers({
-  auth: [authReducer, initialAuth],
-  threads: [threadReducer, initialThreads],
-  posts: [postReducer, initialPosts]
+  auth: [AuthReducer, initialAuth],
+  threads: [ThreadReducer, initialThreads],
+  posts: [PostReducer, initialPosts]
 });
 
 export const Context = createContext(initialState);
