@@ -12,7 +12,7 @@ const Posts = () => {
   const params = useParams();  
   
   useEffect(() => {
-    fetch('http://localhost:8080/api/thread/' + params.id).then(res => {
+    fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/` + params.id).then(res => {
       return res.json();
     }).then(async (data) => {
       await dispatch(updatePosts(data))
