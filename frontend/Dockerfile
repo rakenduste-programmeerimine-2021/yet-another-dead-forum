@@ -11,6 +11,6 @@ RUN npm install && \
     npm cache clean --force
 
 ENTRYPOINT ["npm"]
-CMD ["start"]
+CMD ["run build"]
 
 EXPOSE 3000
