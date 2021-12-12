@@ -1,5 +1,6 @@
 import {
   POSTS_UPDATE,
+  POST_ADD,
   POST_DELETE
 } from './actions';
 
@@ -8,7 +9,12 @@ const PostReducer = (state, action) => {
     case POSTS_UPDATE:
       return {
         ...state,
-        data: action.payload
+        data: action.payload.posts
+      }
+    case POST_ADD:
+      return {
+        ...state,
+        data: [...state.data, action.payload]
       }
     case POST_DELETE:
       return {

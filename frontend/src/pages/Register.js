@@ -46,7 +46,7 @@ function Register() {
 
       if(returnLoginData.token) {
         dispatch(loginUser(loginData))
-        navigate('/login', { replace: true });
+        navigate('/', { replace: true });
       } else {
         let errs = ''
         if (returnLoginData.error_message) {

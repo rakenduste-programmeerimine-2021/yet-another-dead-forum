@@ -51,13 +51,17 @@ const PostItem = ({ post }) => {
         </div>
         <div style={{display: 'flex', flexDirection: 'column' }}>
           <Text>{post.text}</Text>
-          {
-          (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR')) &&
-            <span className="delete" onClick={() => postDelete(post)}>DELETE</span>
-          }
-          {
-            (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === post.author.id) &&
-            <Link className="edit" to={"/post/edit/" + post.id}> EDIT</Link>
+          {state.auth.token &&
+            <>
+            {
+            (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR')) &&
+              <span className="delete" onClick={() => postDelete(post)}>DELETE</span>
+            }
+            {
+              (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === post.author.id) &&
+              <Link className="edit" to={"/post/edit/" + post.id}> EDIT</Link>
+            }
+            </>
           }
         </div>
       </div>
