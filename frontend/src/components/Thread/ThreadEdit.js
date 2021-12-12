@@ -13,7 +13,7 @@ const ThreadEdit = () => {
   const params = useParams();  
   
   useEffect(() => {
-    fetch('${process.env.REACT_APP_MYVALUE}:8080/api/thread/' + params.id).then(res => {
+    fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/` + params.id).then(res => {
       return res.json();
     }).then(async (data) => {
       await dispatch(updateSingleThread(data))
@@ -31,7 +31,7 @@ const ThreadEdit = () => {
       updatedAt: new Date()
     }
 
-    const res = await fetch('${process.env.REACT_APP_MYVALUE}:8080/api/thread/edit', {
+    const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/edit`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
