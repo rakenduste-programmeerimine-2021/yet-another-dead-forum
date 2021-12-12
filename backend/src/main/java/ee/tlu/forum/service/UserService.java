@@ -7,6 +7,7 @@ import ee.tlu.forum.model.Role;
 import ee.tlu.forum.model.User;
 import ee.tlu.forum.repository.RoleRepository;
 import ee.tlu.forum.repository.UserRepository;
+import ee.tlu.forum.utils.RoleHelper;
 import ee.tlu.forum.utils.TokenHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -105,10 +106,22 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
     @Override
     public Role saveRole(Role role) {
-        log.info("Saving new role - " + role.getName());
+        if (role.getName() == null || role.getName().isEmpty()) {
+            throw new BadRequestException("Cannot add role without 'name' field");
+        }
+        if (role.getBodyCss() == null || role.getBodyCss().isEmpty()) {
+            throw new BadRequestException("Cannot add role without 'bodyCss' field");
+        }
+        if (role.getTextCss() == null || role.getTextCss().isEmpty()) {
+            throw new BadRequestException("Cannot add role without 'bodyCss' field");
+        }
+
+        role.setName(RoleHelper.toRoleName(role.getName()));
+
         if (roleRepository.findByName(role.getName()).isPresent()) {
             throw new AlreadyExistsException("A role with the name " + role.getName() + " already exists.");
         }
+        log.info("Saving new role - " + role.getName());
         return roleRepository.save(role);
     }
 
