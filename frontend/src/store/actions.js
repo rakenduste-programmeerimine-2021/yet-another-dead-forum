@@ -8,6 +8,7 @@ export const THREAD_EDIT = 'THREAD_EDIT';
 export const THREAD_DELETE = 'THREAD_DELETE';
 export const THREAD_RESET = 'THREAD_RESET';
 export const POSTS_UPDATE = 'POSTS_UPDATE';
+export const POST_DELETE = 'POST_DELETE';
 export const PAGE_UPDATE = 'PAGE_UPDATE';
 
 export const createUser = data => ({
@@ -55,6 +56,11 @@ export const resetSingleThread = () => ({
 
 export const updatePosts = data => ({
   type: POSTS_UPDATE,
+  payload: data
+});
+
+export const deletePost = data => ({
+  type: POST_DELETE,
   payload: data
 });
 

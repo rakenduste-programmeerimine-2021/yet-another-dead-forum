@@ -1,5 +1,6 @@
 import {
-  POSTS_UPDATE
+  POSTS_UPDATE,
+  POST_DELETE
 } from './actions';
 
 const PostReducer = (state, action) => {
@@ -8,6 +9,15 @@ const PostReducer = (state, action) => {
       return {
         ...state,
         data: action.payload
+      }
+    case POST_DELETE:
+      return {
+        ...state,
+        data: [
+          // Credit: https://stackoverflow.com/a/34582848
+          ...state.data.slice(0, state.data.indexOf(action.payload)),
+          ...state.data.slice(state.data.indexOf(action.payload) + 1)
+        ]
       }
     default:
       return state
