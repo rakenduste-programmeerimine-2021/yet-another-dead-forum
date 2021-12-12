@@ -50,16 +50,11 @@ const PostHeader = ({ data }) => {
           <span><Link to={"/user/" + data.author.username}>{data.author.displayName}</Link></span>
           <span>Posts: </span>
           <span>Join date: {format(new Date(data.author.createdAt), 'dd. MMM yyyy')}</span>
-          <span>
-            {data.author.roles.map((role) => role.name + ' ').includes('ROLE_ADMIN')
-              ? <Text>Admin</Text>
-              : data.author.roles.map((role) => role.name + ' ').includes('ROLE_MODERATOR')
-                ? <Text>Moderator</Text>
-                : data.author.roles.map((role) => role.name + ' ').includes('ROLE_PREMIUM')
-                  ? <Text>Premium Member</Text>
-                  : <Text>Member</Text>
-            }
-          </span>
+          {data.author.roles.map((role, i) => (
+            <div key={i} style={{backgroundColor: role.bodyCss}}>
+              <Text style={{color: role.textCss, marginLeft: '5px'}}>{role.displayName}</Text>
+            </div>
+          ))}
         </div>
         <div style={{display: 'flex', flexDirection: 'column'}}>
           <Title level={5}>{data.title}</Title>
