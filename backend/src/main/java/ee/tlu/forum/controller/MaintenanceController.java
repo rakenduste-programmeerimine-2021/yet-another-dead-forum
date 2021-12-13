@@ -25,7 +25,7 @@ public class MaintenanceController {
     }
 
     @PatchMapping("maintenance/edit")
-    public ResponseEntity<Maintenance> editMaintenance(@RequestBody updateMaintenanceInput message) {
+    public ResponseEntity<Maintenance> editMaintenance(@RequestBody UpdateMaintenanceInput message) {
         return ResponseEntity.ok().body(maintenanceService.updateMaintenance(message.getMessage()));
     }
 
@@ -33,6 +33,6 @@ public class MaintenanceController {
 }
 
 @Data
-class updateMaintenanceInput {
+class UpdateMaintenanceInput {
     private String message;
 }
