@@ -8,8 +8,6 @@ const ProfileAbout = ({about, username}) => {
 
     const [state, dispatch] = useContext(Context);
 
-    console.log(state.auth.user.username)
-
     return (
         <>
         <Card title="About me" style={{marginBottom:'50px'}}>
