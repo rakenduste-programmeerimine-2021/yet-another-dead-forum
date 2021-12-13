@@ -8,8 +8,11 @@ export const THREAD_EDIT = 'THREAD_EDIT';
 export const THREAD_DELETE = 'THREAD_DELETE';
 export const THREAD_RESET = 'THREAD_RESET';
 export const POSTS_UPDATE = 'POSTS_UPDATE';
+export const POST_UPDATE = 'POST_UPDATE';
 export const POST_ADD = 'POST_ADD';
+export const POST_EDIT = 'POST_EDIT';
 export const POST_DELETE = 'POST_DELETE';
+export const POST_RESET = 'POST_RESET';
 export const PAGE_UPDATE = 'PAGE_UPDATE';
 
 export const createUser = data => ({
@@ -60,14 +63,28 @@ export const updatePosts = data => ({
   payload: data
 });
 
+export const updateSinglePost = array => ({
+  type: POST_UPDATE,
+  payload: array
+});
+
 export const addPost = data => ({
   type: POST_ADD,
+  payload: data
+});
+
+export const editPost = data => ({
+  type: POST_EDIT,
   payload: data
 });
 
 export const deletePost = data => ({
   type: POST_DELETE,
   payload: data
+});
+
+export const resetSinglePost = () => ({
+  type: POST_RESET
 });
 
 export const updatePage = data => ({

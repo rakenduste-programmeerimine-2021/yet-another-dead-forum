@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import Posts from './pages/Posts';
 import ThreadAdd from './components/Thread/ThreadAdd';
 import ThreadEdit from './components/Thread/ThreadEdit';
+import PostEdit from './components/Post/PostEdit';
 
 function App() {
   const { Header, Content, Footer } = Layout;
@@ -32,6 +33,7 @@ function App() {
               <Route exact path="/thread/:id" element={<Posts />} />
               <Route exact path="/thread/add" element={<ThreadAdd />} />
               <Route exact path="/thread/edit/:id" element={<ThreadEdit />} />
+              <Route exact path="/post/edit/:id" element={<PostEdit />} />
             </Routes>
           </div>
         </Content>

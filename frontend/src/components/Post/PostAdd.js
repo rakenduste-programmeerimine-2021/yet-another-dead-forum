@@ -9,6 +9,7 @@ const PostAdd = () => {
   const [state, dispatch] = useContext(Context);
   const params = useParams();
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const { Text } = Typography;
 
   const handleSubmit = async ({ text }) => {
@@ -30,6 +31,7 @@ const PostAdd = () => {
     const returnData = await res.json()
 
     if (res.ok) {
+      form.resetFields();
       dispatch(addPost(returnData))
       navigate('/thread/' + params.id, { replace: true });
     } else {
@@ -51,6 +53,7 @@ const PostAdd = () => {
       {state.auth.token
         ?
           <Form
+            form={form}
             name="post"
             style={{maxWidth: '50%', margin: 'auto'}}
             initialValues={{ remember: true }}

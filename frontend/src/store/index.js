@@ -16,7 +16,8 @@ const initialThreads = {
 }
 
 const initialPosts = {
-  data: []
+  data: [],
+  singlePost: {}
 }
 
 const initialPage = {

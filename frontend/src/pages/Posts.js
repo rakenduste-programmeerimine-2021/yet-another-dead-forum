@@ -9,7 +9,7 @@ import PostAdd from '../components/Post/PostAdd';
 
 const Posts = () => {
   const [state, dispatch] = useContext(Context);
-  const params = useParams();  
+  const params = useParams();
   
   useEffect(() => {
     fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/` + params.id).then(res => {
@@ -32,7 +32,7 @@ const Posts = () => {
 
   return(
     <>
-      {state.posts.data.length != 0 &&
+      {Object.keys(state.threads.singleThread).length !== 0 &&
         <>
           <ConfigProvider renderEmpty={state.posts.data.length <= 0 && noPosts}>
             <List 

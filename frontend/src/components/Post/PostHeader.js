@@ -60,7 +60,7 @@ const PostHeader = ({ data }) => {
           <Title level={5}>{data.title}</Title>
           <Text>{data.text}</Text>
           {
-            created.getTime() < updated.getTime() &&
+            Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
             <Text style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
           }
         </div>

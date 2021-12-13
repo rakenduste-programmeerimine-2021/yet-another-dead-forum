@@ -9,6 +9,9 @@ const PostItem = ({ post }) => {
   const [state, dispatch] = useContext(Context);
   const { Text } = Typography;
 
+  const created = new Date(post.createdAt)
+  const updated = new Date(post.updatedAt)
+
   const postDelete = async (data) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/post/delete/` + data.id, {
@@ -51,6 +54,10 @@ const PostItem = ({ post }) => {
         </div>
         <div style={{display: 'flex', flexDirection: 'column' }}>
           <Text>{post.text}</Text>
+          {
+            Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
+            <Text style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
+          }
           {state.auth.token &&
             <>
             {
