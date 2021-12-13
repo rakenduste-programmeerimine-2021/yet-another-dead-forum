@@ -28,8 +28,6 @@ const Profile = () => {
         }
     }, [])
 
-    console.log(error)
-
   return(
     <>
         {(!profile && !error) && <Spin style={{display: 'flex', justifyContent:'center'}} />}
