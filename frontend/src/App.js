@@ -26,7 +26,7 @@ function App() {
           <div className="main-content">
             <Routes>
               <Route exact path="/" element={<Forum />} />
-              <Route exact path="/profile/:username" element={<Profile />} />
+              <Route exact path="/user/:username" element={<Profile />} />
               <Route exact path="/configure" element={<Configure />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
