@@ -5,6 +5,8 @@ import ee.tlu.forum.exception.BadRequestException;
 import ee.tlu.forum.exception.NotFoundException;
 import ee.tlu.forum.model.Role;
 import ee.tlu.forum.model.User;
+import ee.tlu.forum.model.input.EditUserAboutInput;
+import ee.tlu.forum.model.input.EditUserSignatureInput;
 import ee.tlu.forum.repository.RoleRepository;
 import ee.tlu.forum.repository.UserRepository;
 import ee.tlu.forum.utils.RoleHelper;
@@ -58,7 +60,6 @@ public class UserService implements UserServiceInterface, UserDetailsService {
     @Override
     public User editUser(User user, String token) {
         String[] allowedRoles = {"ROLE_ADMIN"};
-        tokenHelper.hasRoleOrUsername(token, user.getUsername().toLowerCase(), allowedRoles);
         if (user.getId() == null) {
             throw new BadRequestException("You must specify an ID for the user");
         }
@@ -71,8 +72,48 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new AlreadyExistsException("E-mail " + user.getEmail() + " is already in use");
         }
+        Optional<User> userOptional = userRepository.findById(user.getId());
+        tokenHelper.hasRoleOrUsername(token, userOptional.get().getUsername().toLowerCase(), allowedRoles);
         log.info("Saving new user - " + user.getUsername().toLowerCase());
+        user.setDisplayName(user.getUsername());
+        user.setUsername(user.getUsername().toLowerCase());
         return userRepository.save(user);
+    }
+
+    public User editUserAbout(EditUserAboutInput user, String token) {
+        String[] allowedRoles = {"ROLE_ADMIN"};
+        if (user.getUsername() == null) {
+            throw new BadRequestException("You must specify a username for the user");
+        }
+        if (user.getAbout() == null) {
+            throw new BadRequestException("You must specify a new 'about' for the user");
+        }
+        Optional<User> userOptional = userRepository.findByUsername(user.getUsername().toLowerCase());
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException("The user with username: " + user.getUsername().toLowerCase() + " does not exist");
+        }
+        tokenHelper.hasRoleOrUsername(token, user.getUsername().toLowerCase(), allowedRoles);
+        log.info("Saving about for user " + user.getUsername().toLowerCase());
+        userOptional.get().setAbout(user.getAbout());
+        return userOptional.get();
+    }
+
+    public User editUserSignature(EditUserSignatureInput user, String token) {
+        String[] allowedRoles = {"ROLE_ADMIN"};
+        if (user.getUsername() == null) {
+            throw new BadRequestException("You must specify a username for the user");
+        }
+        if (user.getSignature() == null) {
+            throw new BadRequestException("You must specify a new 'signature' for the user");
+        }
+        Optional<User> userOptional = userRepository.findByUsername(user.getUsername().toLowerCase());
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException("The user with username: " + user.getUsername().toLowerCase() + " does not exist");
+        }
+        tokenHelper.hasRoleOrUsername(token, user.getUsername().toLowerCase(), allowedRoles);
+        log.info("Saving signature for user - " + user.getUsername().toLowerCase());
+        userOptional.get().setSignature(user.getSignature());
+        return userOptional.get();
     }
 
     @Override

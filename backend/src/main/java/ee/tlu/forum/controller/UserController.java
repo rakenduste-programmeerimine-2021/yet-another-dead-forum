@@ -1,6 +1,8 @@
 package ee.tlu.forum.controller;
 
 import ee.tlu.forum.model.User;
+import ee.tlu.forum.model.input.EditUserAboutInput;
+import ee.tlu.forum.model.input.EditUserSignatureInput;
 import ee.tlu.forum.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,19 @@ public class UserController {
         token = token.substring("Bearer ".length());
         return ResponseEntity.ok().body(userService.editUser(user, token));
     }
+
+    @PostMapping("/user/edit/about")
+    public ResponseEntity<User> editUserAbout(@RequestBody EditUserAboutInput input, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        return ResponseEntity.ok().body(userService.editUserAbout(input, token));
+    }
+
+    @PostMapping("/user/edit/signature")
+    public ResponseEntity<User> editUserSignature(@RequestBody EditUserSignatureInput input, @RequestHeader("Authorization") String token) {
+        token = token.substring("Bearer ".length());
+        return ResponseEntity.ok().body(userService.editUserSignature(input, token));
+    }
+
 
     @GetMapping("/user/id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
