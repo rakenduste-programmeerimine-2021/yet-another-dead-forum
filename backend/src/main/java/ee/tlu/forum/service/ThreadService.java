@@ -115,7 +115,7 @@ public class ThreadService implements ThreadServiceInterface {
     @Override
     public List<Thread> getAllThreads() {
         log.info("Fetching all threads");
-        return threadRepository.findAll();
+        return threadRepository.findAllByOrderByIdDesc();
     }
 
     public Collection<Post> getAllPostsByThreadId(Long id) {
