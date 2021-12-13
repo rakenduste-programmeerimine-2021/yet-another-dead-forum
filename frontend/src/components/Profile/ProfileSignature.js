@@ -10,7 +10,7 @@ const ProfileAbout = ({signature, username}) => {
     const [state, dispatch] = useContext(Context);
 
     return (
-        <Card title="Signature" hoverable>
+        <Card title="Signature" style={{marginBottom:'50px'}}>
         {
             signature
             ?
