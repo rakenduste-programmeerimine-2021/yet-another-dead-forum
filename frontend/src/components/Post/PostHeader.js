@@ -15,7 +15,7 @@ const PostHeader = ({ data }) => {
   const updated = new Date(data.updatedAt)
 
   const threadDelete = async (data) => {
-    if (window.confirm("Are you sure you want to deltete the thread\n" + data.title + "?")) {
+    if (window.confirm("Are you sure you want to delete the thread\n" + data.title + "?")) {
       const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/delete/` + data.id, {
         method: 'DELETE',
         headers: {
@@ -50,22 +50,17 @@ const PostHeader = ({ data }) => {
           <span><Link to={"/user/" + data.author.username}>{data.author.displayName}</Link></span>
           <span>Posts: </span>
           <span>Join date: {format(new Date(data.author.createdAt), 'dd. MMM yyyy')}</span>
-          <span>
-            {data.author.roles.map((role) => role.name + ' ').includes('ROLE_ADMIN')
-              ? <Text>Admin</Text>
-              : data.author.roles.map((role) => role.name + ' ').includes('ROLE_MODERATOR')
-                ? <Text>Moderator</Text>
-                : data.author.roles.map((role) => role.name + ' ').includes('ROLE_PREMIUM')
-                  ? <Text>Premium Member</Text>
-                  : <Text>Member</Text>
-            }
-          </span>
+          {data.author.roles.map((role, i) => (
+            <div key={i} style={{backgroundColor: role.bodyCss}}>
+              <Text style={{color: role.textCss, marginLeft: '5px'}}>{role.displayName}</Text>
+            </div>
+          ))}
         </div>
         <div style={{display: 'flex', flexDirection: 'column'}}>
           <Title level={5}>{data.title}</Title>
           <Text>{data.text}</Text>
           {
-            created.getTime() < updated.getTime() &&
+            Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
             <Text style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
           }
         </div>

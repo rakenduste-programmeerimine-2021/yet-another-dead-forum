@@ -2,19 +2,20 @@ import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ConfigProvider, Empty, List } from 'antd';
 import { Context } from '../store';
-import { updatePosts } from '../store/actions';
+import { updatePosts, updateSingleThread } from '../store/actions';
 import PostHeader from '../components/Post/PostHeader';
 import PostItem from '../components/Post/PostItem';
 import PostAdd from '../components/Post/PostAdd';
 
 const Posts = () => {
   const [state, dispatch] = useContext(Context);
-  const params = useParams();  
+  const params = useParams();
   
   useEffect(() => {
     fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/` + params.id).then(res => {
       return res.json();
     }).then(async (data) => {
+      await dispatch(updateSingleThread(data))
       await dispatch(updatePosts(data))
     })
   }, [])
@@ -31,17 +32,17 @@ const Posts = () => {
 
   return(
     <>
-      {state.posts.data.length != 0 &&
+      {Object.keys(state.threads.singleThread).length !== 0 &&
         <>
-          <ConfigProvider renderEmpty={state.posts.data.posts.length <= 0 && noPosts}>
+          <ConfigProvider renderEmpty={state.posts.data.length <= 0 && noPosts}>
             <List 
               itemLayout="horizontal"
-              dataSource={state.posts.data.posts}
+              dataSource={state.posts.data}
               pagination={{
                 pageSize: 5,
               }}
               header={
-                <PostHeader data={state.posts.data} />
+                <PostHeader data={state.threads.singleThread} />
               }
               renderItem={post => (
                 <PostItem post={post} />

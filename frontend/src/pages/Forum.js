@@ -79,7 +79,7 @@ const Forum = () => {
                       {thread.posts[thread.posts.length - 1].author.username}
                     </Link>
                   {thread.posts[thread.posts.length - 1].createdAt &&
-                    <span> at {thread.posts[thread.posts.length - 1].createdAt}</span>
+                    <span> at {format(new Date(thread.posts[thread.posts.length - 1].createdAt), 'dd. MMM yyyy')}</span>
                   }
                   </span>
                 }
