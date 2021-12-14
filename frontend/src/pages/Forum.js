@@ -45,7 +45,7 @@ const Forum = () => {
                     {posts[posts.length - 1].author.displayName}
                 </Link>
               </Text>
-              <Text type="secondary"><ClockCircleOutlined style={{color:"rgba(0, 0, 0, 0.85)"}} /> {format(new Date(posts[posts.length - 1].createdAt), 'dd. MMM yyyy | HH:mm')}</Text>
+              {posts[posts.length - 1].createdAt && <Text type="secondary"><ClockCircleOutlined style={{color:"rgba(0, 0, 0, 0.85)"}} /> {format(new Date(posts[posts.length - 1].createdAt), 'dd. MMM yyyy | HH:mm')}</Text>}
             </Space>
         }
       </Space>
