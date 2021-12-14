@@ -15,7 +15,7 @@ const Header = () => {
   return (
     <Menu theme="dark" mode="horizontal" selectedKeys={[state.page.current]}>
       <Menu.Item key={'sitename'} onClick={e => dispatch(updatePage(e.key))}>
-        <Link to="/">Yet Another Dead Forum</Link>
+        <Link style={{fontWeight:'bold'}} to="/">Yet Another Dead Forum</Link>
       </Menu.Item>
       <Menu.Item key={'forum'} onClick={e => dispatch(updatePage(e.key))}>
         <Link to="/">Forums</Link>
