@@ -45,7 +45,7 @@ const PostItem = ({ post }) => {
       <div style={{display: 'flex', gap: '15px'}}>
         <div style={{display: 'flex', flexDirection: 'column', flex: '0 0 10em'}}>
         <span><Link to={"/user/" + post.author.username}>{post.author.displayName}</Link></span>
-          <span>Posts: </span>
+          <span>Posts: {post.author.threadAmount + post.author.postAmount}</span>
           <span>Join date: {format(new Date(post.author.createdAt), 'dd. MMM yyyy')}</span>
           {post.author.roles.map((role, i) => (
             <div key={i} style={{backgroundColor: role.bodyCss, textAlign: 'center', marginBottom:'5px'}}>

@@ -49,7 +49,7 @@ const PostHeader = ({ data }) => {
       <div style={{display: 'flex', gap: '15px'}}>
         <div style={{display: 'inline-flex', flexDirection: 'column', flex: '0 0 10em'}}>
           <span><Link to={"/user/" + data.author.username}>{data.author.displayName}</Link></span>
-          <span>Posts: </span>
+          <span>Posts: {data.author.threadAmount + data.author.postAmount}</span>
           <span>Join date: {format(new Date(data.author.createdAt), 'dd. MMM yyyy')}</span>
           {data.author.roles.map((role, i) => (
             <div key={i} style={{backgroundColor: role.bodyCss, textAlign: 'center', marginBottom:'5px'}}>
