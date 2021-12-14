@@ -21,7 +21,7 @@ const ProfileAbout = ({signature, username}) => {
             {
                 (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.username === username)
                 &&
-                <Button style={{float:'right'}} href={`/user/${username}/edit/about`}>Edit Signature</Button>
+                <Button style={{float:'right'}} href={`/user/${username}/edit/signature`}>Edit Signature</Button>
             }
         </Card>
     )
