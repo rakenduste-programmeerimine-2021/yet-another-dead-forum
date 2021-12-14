@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import {List, Space, Typography} from 'antd';
+import {Divider, List, Space, Typography} from 'antd';
 import { Context } from '../../store';
 import { deletePost } from '../../store/actions';
 import {ClockCircleOutlined} from "@ant-design/icons";
@@ -53,26 +53,23 @@ const PostItem = ({ post }) => {
             </div>
           ))}
         </div>
-        <div style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-          <Text>{post.text}</Text>
-          {
-            Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
-            <Text style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
-          }
-          {state.auth.token &&
-            <>
+        <div style={{display: 'flex', flexDirection: 'column', justifyContent:'space-between'}}>
+          <Text style={{marginBottom: '20px'}}>{post.text}</Text>
+          {(post.author.signature && post.author.signature.length) && <div><Divider dashed/><p>{post.author.signature}</p><Divider dashed/></div>}
+          <Space id="test"  size={"large"} style={{display: 'flex', width: '100%'}}>
+            {post.createdAt && <Text style={{ fontSize: '11px'}} type='secondary' ><ClockCircleOutlined /> {format(new Date(post.createdAt), 'dd. MMM yyyy')}</Text>}
             {
-            (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR')) &&
+              Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
+              <Text type="secondary" style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
+            }
+            {state.auth.token &&
+              (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR')) &&
               <span className="delete" onClick={() => postDelete(post)}>DELETE</span>
             }
-            {
-              (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === post.author.id) &&
-              <Link className="edit" to={"/post/edit/" + post.id}> EDIT</Link>
+            {state.auth.token &&
+                (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === post.author.id) &&
+                <Link className="edit" to={"/post/edit/" + post.id}> EDIT</Link>
             }
-            </>
-          }
-          <Space id="test"  size={"large"} style={{display: 'inline-block', position: 'absolute', bottom: '0', width: '100px'}}>
-            {post.createdAt && <Text style={{ fontSize: '11px'}} type='secondary' ><ClockCircleOutlined /> {format(new Date(post.createdAt), 'dd. MMM yyyy')}</Text>}
           </Space>
         </div>
       </div>

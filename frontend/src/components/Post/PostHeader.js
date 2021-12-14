@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import {Space, Typography} from 'antd';
+import {Divider, Space, Typography} from 'antd';
 import { Context } from '../../store';
 import { deleteThread } from '../../store/actions';
 import {ClockCircleOutlined} from "@ant-design/icons";
@@ -57,32 +57,35 @@ const PostHeader = ({ data }) => {
             </div>
           ))}
         </div>
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-          <Space id="test"  size={"large"}>
-            {data.createdAt && <Text type='secondary' style={{ fontSize: '11px'}} ><ClockCircleOutlined /> {format(new Date(data.createdAt), 'dd. MMM yyyy')}</Text>}
-          </Space>
+        <div style={{display: 'flex', flexDirection: 'column', justifyContent:'space-between'}}>
           <Title level={5}>{data.title}</Title>
           <Text>{data.text}</Text>
+          {(data.author.signature && data.author.signature.length) && <div><Divider dashed/><p>{data.author.signature}</p><Divider dashed/></div>}
+          <Space size="large">
+            <Space id="test"  size={"large"}>
+              {data.createdAt && <Text type='secondary' style={{ fontSize: '11px'}} ><ClockCircleOutlined /> {format(new Date(data.createdAt), 'dd. MMM yyyy')}</Text>}
+            </Space>
           {
             Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
-            <Text style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
+            <Text type="secondary" style={{ fontSize: '11px', fontStyle: 'italic' }}>Edited</Text>
           }
+            {state.auth.token &&
+            <>
+              {
+                (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR')) &&
+                <span className="delete" onClick={() => threadDelete(data)}>DELETE</span>
+              }
+              {
+                (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === data.author.id) &&
+                <Link className="edit" to={"/thread/edit/" + data.id}> EDIT</Link>
+              }
+            </>
+            }
+          </Space>
         </div>
-        {state.auth.token &&
-          <>
-          {
-          (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR')) &&
-            <span className="delete" onClick={() => threadDelete(data)}>DELETE</span>
-          }
-          {
-            (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.roles.includes('ROLE_MODERATOR') || parseInt(state.auth.user.id, 10) === data.author.id) &&
-            <Link className="edit" to={"/thread/edit/" + data.id}> EDIT</Link>
-          }
-          </>
-        }
       </div>
     </>
   )
-};
+}
 
 export default PostHeader;
