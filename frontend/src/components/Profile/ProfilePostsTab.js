@@ -24,7 +24,7 @@ const ProfilePostsTab = ({posts}) => {
                 <List.Item
                     key={item.text}
                     actions={[
-                        <IconText icon={ClockCircleOutlined} text={format(new Date(item.createdAt), 'dd. MMM yyyy | HH:mm')}/>
+                        item.createdAt && <IconText icon={ClockCircleOutlined} text={format(new Date(item.createdAt), 'dd. MMM yyyy | HH:mm')}/>
                     ]}
                 >
                     <List.Item.Meta
