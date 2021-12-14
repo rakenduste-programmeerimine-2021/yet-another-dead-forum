@@ -56,7 +56,7 @@ const PostItem = ({ post }) => {
         <div style={{display: 'flex', flexDirection: 'column', justifyContent:'space-between'}}>
           <Text style={{marginBottom: '20px'}}>{post.text}</Text>
           {(post.author.signature && post.author.signature.length) && <div><Divider dashed/><p>{post.author.signature}</p><Divider dashed/></div>}
-          <Space id="test"  size={"large"} style={{display: 'flex', width: '100%'}}>
+          <Space size={"large"} style={{display: 'flex', width: '100%'}}>
             {post.createdAt && <Text style={{ fontSize: '11px'}} type='secondary' ><ClockCircleOutlined /> {format(new Date(post.createdAt), 'dd. MMM yyyy')}</Text>}
             {
               Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
