@@ -18,3 +18,19 @@
 .edit {
   color: rgb(0, 52, 165);
 }
+
+.ant-list-item {
+  border: 1px solid #eee;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #fefeff;
+}
+
+.ant-list-item:nth-of-type(2n) {
+  background-color: rgba(250, 250, 250, 0.5);
+}
+
+.ant-list-item:hover {
+  box-shadow: 0 0 4px #eee;
+  transition: 0.3s;
+}
