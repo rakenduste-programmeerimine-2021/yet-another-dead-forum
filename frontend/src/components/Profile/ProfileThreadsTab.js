@@ -11,7 +11,7 @@ const ProfileThreadsTab = ({threads}) => {
             {React.createElement(icon)}
             {text}
         </Space>
-    );
+    )
 
     return (
         <List
@@ -29,7 +29,7 @@ const ProfileThreadsTab = ({threads}) => {
                     key={item.title}
                     actions={[
                         <IconText icon={MessageOutlined} text={item.posts.length} key="list-vertical-message" />,
-                        <IconText icon={ClockCircleOutlined} text={format(new Date(item.createdAt), 'dd. MMM yyyy | HH:mm')}/>
+                        item.createdAt && <IconText icon={ClockCircleOutlined} text={format(new Date(item.createdAt), 'dd. MMM yyyy | HH:mm')}/>
                     ]}
                 >
                     <List.Item.Meta
