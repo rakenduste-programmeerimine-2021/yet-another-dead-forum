@@ -45,13 +45,13 @@ const PostHeader = ({ data }) => {
   return(
     <>
       { error && <Text style={{whiteSpace: 'pre-wrap'}} type="danger">{ error }</Text> }
-      <div style={{display: 'flex'}}>
-        <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{display: 'flex', gap: '15px'}}>
+        <div style={{display: 'inline-flex', flexDirection: 'column', flex: '0 0 10em'}}>
           <span><Link to={"/user/" + data.author.username}>{data.author.displayName}</Link></span>
           <span>Posts: </span>
           <span>Join date: {format(new Date(data.author.createdAt), 'dd. MMM yyyy')}</span>
           {data.author.roles.map((role, i) => (
-            <div key={i} style={{backgroundColor: role.bodyCss, textAlign: 'center'}}>
+            <div key={i} style={{backgroundColor: role.bodyCss, textAlign: 'center', marginBottom:'5px'}}>
               <Text style={{color: role.textCss, marginLeft: '5px'}}>{role.displayName}</Text>
             </div>
           ))}
