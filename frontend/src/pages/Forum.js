@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Button, List, Typography } from 'antd';
+import {Button, List, Space, Typography} from 'antd';
 import { Context } from '../store';
 import { deleteThread, updateThreads, resetSingleThread } from '../store/actions';
 import './Forum.css'
+import {ClockCircleOutlined, CommentOutlined, UsergroupAddOutlined, UserOutlined} from "@ant-design/icons";
 
 const Forum = () => {
   const [error, setError] = useState('');
@@ -19,6 +20,36 @@ const Forum = () => {
       dispatch(resetSingleThread())
     })
   }, [])
+
+  const ThreadMetaTop = ({ author, date }) => (
+      <Space size={"large"} style={{marginBottom:'15px'}} >
+        <Space size={"small"}>
+          <UserOutlined />
+          <Link to={"/user/" + author}>
+            {author}
+          </Link>
+        </Space>
+        {date && <div><ClockCircleOutlined /> {format(new Date(date), 'dd. MMM yyyy')}</div>}
+      </Space>
+  )
+
+  const ThreadMetaBottom = ({ posts }) => (
+      <Space size='large' style={{marginTop:'15px'}}>
+        <Space size='small'>
+          <CommentOutlined />{posts.length}
+        </Space>
+        {(posts.length > 0) &&
+            <Space size = 'large'>
+              <Text type="secondary"><UsergroupAddOutlined style={{color:"rgba(0, 0, 0, 0.85)"}}/> Last post by{' '}
+                <Link to={"/user/" + posts[posts.length - 1].author.username}>
+                    {posts[posts.length - 1].author.displayName}
+                </Link>
+              </Text>
+              <Text type="secondary"><ClockCircleOutlined style={{color:"rgba(0, 0, 0, 0.85)"}} /> {format(new Date(posts[posts.length - 1].createdAt), 'dd. MMM yyyy | HH:mm')}</Text>
+            </Space>
+        }
+      </Space>
+  )
 
   const threadDelete = async (thread) => {
     if (window.confirm("Are you sure you want to deltete the thread\n" + thread.title + "?")) {
@@ -53,7 +84,7 @@ const Forum = () => {
       {
         state.auth.token
           ?
-          <Button href='/thread/add'>Create Thread</Button>
+          <Button style={{marginBottom:'20px'}} href='/thread/add'>Create Thread</Button>
           :
           <Text>You must log in to create a thread</Text>
       }
@@ -66,23 +97,10 @@ const Forum = () => {
         renderItem={thread => (
           <List.Item>
             <div style={{ maxWidth: '100%' }}>
-              <div><Link to={"/user/" + thread.author.username}>{thread.author.displayName}</Link>
-                {thread.createdAt &&
-                  <span> Submitted {format(new Date(thread.createdAt), 'dd. MMM yyyy')}</span>
-                }
-              </div>
+                <ThreadMetaTop date={thread.createdAt} author={thread.author.displayName} />
               <Link to={"/thread/" + thread.id}><Title level={5} ellipsis>{thread.title}</Title></Link>
-              <div>{thread.posts.length} Posts
-                {thread.posts.length > 0 && 
-                  <span> Last post by&nbsp;
-                    <Link to={"/user/" + thread.posts[thread.posts.length - 1].author.username}>
-                      {thread.posts[thread.posts.length - 1].author.username}
-                    </Link>
-                  {thread.posts[thread.posts.length - 1].createdAt &&
-                    <span> at {format(new Date(thread.posts[thread.posts.length - 1].createdAt), 'dd. MMM yyyy')}</span>
-                  }
-                  </span>
-                }
+              <div>
+                <ThreadMetaBottom posts={thread.posts}/>
                 {state.auth.token &&
                   <span className="edit-delete">
                   {
