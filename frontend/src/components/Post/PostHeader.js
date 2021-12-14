@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Typography } from 'antd';
+import {Space, Typography} from 'antd';
 import { Context } from '../../store';
 import { deleteThread } from '../../store/actions';
+import {ClockCircleOutlined} from "@ant-design/icons";
 
 const PostHeader = ({ data }) => {
   const [error, setError] = useState('');
@@ -57,6 +58,9 @@ const PostHeader = ({ data }) => {
           ))}
         </div>
         <div style={{display: 'flex', flexDirection: 'column'}}>
+          <Space id="test"  size={"large"}>
+            {data.createdAt && <Text type='secondary' style={{ fontSize: '11px'}} ><ClockCircleOutlined /> {format(new Date(data.createdAt), 'dd. MMM yyyy')}</Text>}
+          </Space>
           <Title level={5}>{data.title}</Title>
           <Text>{data.text}</Text>
           {

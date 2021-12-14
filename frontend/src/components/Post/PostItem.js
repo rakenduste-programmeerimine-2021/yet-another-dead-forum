@@ -1,9 +1,10 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { List, Typography } from 'antd';
+import {List, Space, Typography} from 'antd';
 import { Context } from '../../store';
 import { deletePost } from '../../store/actions';
+import {ClockCircleOutlined} from "@ant-design/icons";
 
 const PostItem = ({ post }) => {
   const [state, dispatch] = useContext(Context);
@@ -52,7 +53,7 @@ const PostItem = ({ post }) => {
             </div>
           ))}
         </div>
-        <div style={{display: 'flex', flexDirection: 'column' }}>
+        <div style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
           <Text>{post.text}</Text>
           {
             Math.round(created.getTime() / 1000) < Math.round(updated.getTime() / 1000) &&
@@ -70,6 +71,9 @@ const PostItem = ({ post }) => {
             }
             </>
           }
+          <Space id="test"  size={"large"} style={{display: 'inline-block', position: 'absolute', bottom: '0', width: '100px'}}>
+            {post.createdAt && <Text style={{ fontSize: '11px'}} type='secondary' ><ClockCircleOutlined /> {format(new Date(post.createdAt), 'dd. MMM yyyy')}</Text>}
+          </Space>
         </div>
       </div>
     </List.Item>
