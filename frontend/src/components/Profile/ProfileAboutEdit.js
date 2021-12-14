@@ -53,7 +53,7 @@ const ProfileAboutEdit = () => {
     }
 
     const cancelEdit = () => {
-        navigate(-1);
+        navigate(-1)
     }
 
     const handleError = (err) => {
