@@ -51,7 +51,7 @@ const PostHeader = ({ data }) => {
           <span>Posts: </span>
           <span>Join date: {format(new Date(data.author.createdAt), 'dd. MMM yyyy')}</span>
           {data.author.roles.map((role, i) => (
-            <div key={i} style={{backgroundColor: role.bodyCss}}>
+            <div key={i} style={{backgroundColor: role.bodyCss, textAlign: 'center'}}>
               <Text style={{color: role.textCss, marginLeft: '5px'}}>{role.displayName}</Text>
             </div>
           ))}
