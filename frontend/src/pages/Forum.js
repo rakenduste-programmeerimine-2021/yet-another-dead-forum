@@ -98,7 +98,7 @@ const Forum = () => {
           <List.Item>
             <div style={{ maxWidth: '100%' }}>
                 <ThreadMetaTop date={thread.createdAt} author={thread.author.displayName} />
-              <Link to={"/thread/" + thread.id}><Title level={5} ellipsis>{thread.title}</Title></Link>
+              <Link to={"/thread/" + thread.id}><Title style={{ fontSize: '18px'}} ellipsis>{thread.title}</Title></Link>
               <div>
                 <ThreadMetaBottom posts={thread.posts}/>
                 {state.auth.token &&
