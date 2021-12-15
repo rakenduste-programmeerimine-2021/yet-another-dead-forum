@@ -8,7 +8,7 @@ const Profile = () => {
 
     const [profile, setProfile] = useState()
     const [error, setError] = useState()
-    const [state, dispatch] = useContext(Context)
+    const [state] = useContext(Context)
     const params = useParams()
 
     useEffect(async () => {
