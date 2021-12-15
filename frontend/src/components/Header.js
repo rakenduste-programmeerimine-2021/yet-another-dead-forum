@@ -26,9 +26,12 @@ const Header = () => {
             <Menu.Item key={'profile'} onClick={e => dispatch(updatePage(e.key))}>
               <Link to={'/user/' + state.auth.user.username}>Profile</Link>
             </Menu.Item>
-            <Menu.Item key={'configure'} onClick={e => dispatch(updatePage(e.key))}>
-              <Link to="/configure">Configure</Link>
-            </Menu.Item>
+              {state.auth.user.roles.includes('ROLE_ADMIN') &&
+                  <Menu.Item key={'configure'} onClick={e => dispatch(updatePage(e.key))}>
+                      <Link to="/configure">Configure</Link>
+                  </Menu.Item>
+              }
+
             <Menu.Item key={'logout'} onClick={handleLogout}>
               <Link to="#">Logout</Link>
             </Menu.Item>
