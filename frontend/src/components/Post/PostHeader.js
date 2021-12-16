@@ -52,6 +52,7 @@ const PostHeader = ({ data }) => {
           <span>Posts: {data.author.threadAmount + data.author.postAmount}</span>
           <span>Join date: {format(new Date(data.author.createdAt), 'dd. MMM yyyy')}</span>
           {data.author.roles.map((role, i) => (
+            ((role.id === 1 && data.author.roles.length === 1 ) || (role.id !== 1 && data.author.roles.length > 1)) &&
             <div key={i} style={{backgroundColor: role.bodyCss, textAlign: 'center', marginBottom:'5px'}}>
               <Text style={{color: role.textCss, marginLeft: '5px'}}>{role.displayName}</Text>
             </div>

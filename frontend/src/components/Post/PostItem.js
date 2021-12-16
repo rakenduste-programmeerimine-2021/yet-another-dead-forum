@@ -48,6 +48,7 @@ const PostItem = ({ post }) => {
           <span>Posts: {post.author.threadAmount + post.author.postAmount}</span>
           <span>Join date: {format(new Date(post.author.createdAt), 'dd. MMM yyyy')}</span>
           {post.author.roles.map((role, i) => (
+            ((role.id === 1 && post.author.roles.length === 1 ) || (role.id !== 1 && post.author.roles.length > 1)) &&
             <div key={i} style={{backgroundColor: role.bodyCss, textAlign: 'center', marginBottom:'5px'}}>
               <Text style={{color: role.textCss, marginLeft: '5px'}}>{role.displayName}</Text>
             </div>
