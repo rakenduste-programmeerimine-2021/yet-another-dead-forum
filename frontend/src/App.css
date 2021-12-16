@@ -39,4 +39,8 @@ span.ant-typography {
   .main-content {
     padding: 5px;
   }
+
+  .content-list {
+    flex-direction: column;
+  }
 }

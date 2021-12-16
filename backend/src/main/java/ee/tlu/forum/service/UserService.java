@@ -179,6 +179,26 @@ public class UserService implements UserServiceInterface, UserDetailsService {
         log.info("Adding role {} to user {}", roleName, username);
         user.getRoles().add(role);
     }
+
+    public void deleteRoleFromUser(String username, String roleName) {
+        if (userRepository.findByUsername(username.toLowerCase()).isEmpty()) {
+            throw new NotFoundException("User does not exist.");
+        }
+        if (roleRepository.findByName(roleName).isEmpty()) {
+            throw new NotFoundException("Role does not exist.");
+        }
+
+        User user = userRepository.findByUsername(username.toLowerCase()).get();
+        Role role = roleRepository.findByName(roleName).get();
+
+        if (!user.getRoles().contains(role)) {
+            throw new BadRequestException("User does not have this role!");
+        }
+
+        log.info("Removing role {} from user {}", roleName, username);
+        user.getRoles().remove(role);
+    }
+
     @Override
     public List<User> getUsers() {
         log.info("Fetching all users");

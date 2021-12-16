@@ -34,14 +34,20 @@ public class RoleController {
     }
 
     @PostMapping("/role/addtouser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody AddRoleToUserForm form) {
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleAndUserForm form) {
         userService.addRoleToUser(form.getUsername(), form.getRolename());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/role/deletefromuser")
+    public ResponseEntity<?> deleteRoleFromUser(@RequestBody RoleAndUserForm form) {
+        userService.deleteRoleFromUser(form.getUsername(), form.getRolename());
         return ResponseEntity.ok().build();
     }
 }
 
 @Data
-class AddRoleToUserForm {
+class RoleAndUserForm {
     private String username;
     private String rolename;
 }
