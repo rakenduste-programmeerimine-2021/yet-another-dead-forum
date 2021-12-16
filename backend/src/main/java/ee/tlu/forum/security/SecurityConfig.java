@@ -49,17 +49,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // UserController
         http.authorizeRequests().antMatchers("/api/user/delete/**").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers("/api/user/edit/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers("/api/users/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers("/api/user/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/users/****").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/user/****").hasAnyAuthority("ROLE_USER");
 
         // RoleController
-        http.authorizeRequests().antMatchers(GET, "/api/roles/**").hasAnyAuthority("ROLE_ADMIN");
-        http.authorizeRequests().antMatchers(GET, "/api/role/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/roles/****").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/role/****").hasAnyAuthority("ROLE_ADMIN");
 
         // ThreadController
-        http.authorizeRequests().antMatchers("/api/thread/delete/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR");
-        http.authorizeRequests().antMatchers("/api/thread/add/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers("/api/thread/edit/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/thread/delete/****").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR");
+        http.authorizeRequests().antMatchers("/api/thread/add/****").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/thread/edit/****").hasAnyAuthority("ROLE_USER");
 
         // PostController
         http.authorizeRequests().antMatchers("/api/post/delete/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR");

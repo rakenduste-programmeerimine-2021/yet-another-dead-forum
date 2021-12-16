@@ -24,7 +24,7 @@ const Header = () => {
         (
           <>
             <Menu.Item key={'profile'} onClick={e => dispatch(updatePage(e.key))}>
-              <Link to="/profile">Profile</Link>
+              <Link to={'/user/' + state.auth.user.username}>Profile</Link>
             </Menu.Item>
             <Menu.Item key={'configure'} onClick={e => dispatch(updatePage(e.key))}>
               <Link to="/configure">Configure</Link>
