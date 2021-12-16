@@ -41,8 +41,7 @@ const PostItem = ({ post }) => {
   }
 
   return(
-    <List.Item>
-      <div style={{display: 'flex', gap: '15px'}}>
+    <List.Item style={{display: 'flex', gap: '15px'}} className={'content-list'}>
         <div style={{display: 'flex', flexDirection: 'column', flex: '0 0 10em'}}>
         <span><Link to={"/user/" + post.author.username}>{post.author.displayName}</Link></span>
           <span>Posts: {post.author.threadAmount + post.author.postAmount}</span>
@@ -73,7 +72,6 @@ const PostItem = ({ post }) => {
             }
           </Space>
         </div>
-      </div>
     </List.Item>
   )
 };

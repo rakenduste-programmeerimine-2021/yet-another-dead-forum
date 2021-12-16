@@ -46,7 +46,7 @@ const PostHeader = ({ data }) => {
   return(
     <>
       { error && <Text style={{whiteSpace: 'pre-wrap'}} type="danger">{ error }</Text> }
-      <div style={{display: 'flex', gap: '15px'}}>
+      <div className={'content-list'} style={{display: 'flex', gap: '15px'}}>
         <div style={{display: 'inline-flex', flexDirection: 'column', flex: '0 0 10em'}}>
           <span><Link to={"/user/" + data.author.username}>{data.author.displayName}</Link></span>
           <span>Posts: {data.author.threadAmount + data.author.postAmount}</span>
