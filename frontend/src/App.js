@@ -15,6 +15,7 @@ import ThreadEdit from './components/Thread/ThreadEdit';
 import PostEdit from './components/Post/PostEdit';
 import ProfileAboutEdit from "./components/Profile/ProfileAboutEdit";
 import ProfileSignatureEdit from "./components/Profile/ProfileSignatureEdit";
+import ConfigureUserRankTabs from "./components/Configure/ConfigureUserRankTabs";
 
 function App() {
   const { Header, Content, Footer } = Layout;
@@ -32,6 +33,7 @@ function App() {
               <Route exact path="/user/:username/edit/about" element={<ProfileAboutEdit />} />
               <Route exact path="/user/:username/edit/signature" element={<ProfileSignatureEdit />} />
               <Route exact path="/configure" element={<Configure />} />
+              <Route exact path="/configure/user/:username/roles" element={<ConfigureUserRankTabs />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/thread/:id" element={<Posts />} />

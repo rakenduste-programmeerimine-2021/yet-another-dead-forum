@@ -60,8 +60,6 @@ const ProfileAboutEdit = () => {
         console.log(err)
     }
 
-    if (!about) return (<Spin style={{display: 'flex', justifyContent:'center'}} />)
-
     return(
         <>
             { (state.auth.token &&

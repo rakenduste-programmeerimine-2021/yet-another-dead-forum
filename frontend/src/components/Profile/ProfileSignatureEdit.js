@@ -14,7 +14,7 @@ const ProfileSignatureEdit = () => {
         const user = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/username/` + params.username).then(res => {
             return res.json()
         })
-        setSignature(user.signature)
+        setSignature(user.signature ?? '')
     }, [])
 
     const { TextArea } = Input;
@@ -59,8 +59,6 @@ const ProfileSignatureEdit = () => {
     const handleError = (err) => {
         console.log(err)
     }
-
-    if (!signature) return (<Spin style={{display: 'flex', justifyContent:'center'}} />)
 
     return(
         <>

@@ -31,3 +31,16 @@ html, body {
 span.ant-typography {
   white-space: pre-wrap;
 }
+
+@media only screen and (max-width: 600px) {
+  .forum-content {
+    padding: 5px;
+  }
+  .main-content {
+    padding: 5px;
+  }
+
+  .content-list {
+    flex-direction: column;
+  }
+}

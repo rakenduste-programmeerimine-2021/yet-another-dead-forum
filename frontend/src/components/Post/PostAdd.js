@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Form, Input, Typography } from 'antd';
 import { Context } from '../../store';
 import { addPost } from '../../store/actions';
+import {InfoCircleOutlined} from "@ant-design/icons";
 
 const PostAdd = () => {
   const [error, setError] = useState('');
@@ -55,7 +56,7 @@ const PostAdd = () => {
           <Form
             form={form}
             name="post"
-            style={{maxWidth: '50%', margin: 'auto'}}
+            style={{maxWidth: '50%', margin: 'auto', marginTop: '50px'}}
             initialValues={{ remember: true }}
             onFinish={handleSubmit}
             // onFinishFailed={handleError}
@@ -74,7 +75,9 @@ const PostAdd = () => {
             </Form.Item>
           </Form>
         :
-          <Text>You must log in to reply</Text>
+          <div style={{marginTop: '50px', textAlign:'center'}}>
+            <Text><InfoCircleOutlined /> You must log in to reply</Text>
+          </div>
       }
     </>
   )
