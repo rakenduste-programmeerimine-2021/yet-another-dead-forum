@@ -16,33 +16,35 @@ const Configure = () => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + state.auth.token
-        }})
-          .then(res => {
-            if (!res.ok) throw new Error('Could load users.')
-            else return res.json()}))
+        }
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Could load users.')
+          else return res.json()
+        }))
     } catch (e) {
-      setError('Could not load profile')
+      setError('Could not load users')
     }
   }, [])
 
   if (!state.auth.token || (state.auth.token && !state.auth.user.roles.includes('ROLE_ADMIN'))) {
     return (
-        <Navigate to="/"/>
+      <Navigate to="/"/>
     )
   }
 
-  return(
-      <>
-        {(!users && !error) && <Spin style={{display: 'flex', justifyContent:'center'}} />}
-        {
-          (users && !error)
-              ?
-              <ConfigureLoaded users={users}/>
-              :
-              <p style={{display: 'flex', justifyContent: 'center'}}>{error}</p>
-        }
-      </>
+  return (
+    <>
+      {(!users && !error) && <Spin style={{display: 'flex', justifyContent: 'center'}}/>}
+      {
+        (users && !error)
+          ?
+          <ConfigureLoaded users={users}/>
+          :
+          <p style={{display: 'flex', justifyContent: 'center'}}>{error}</p>
+      }
+    </>
   )
-};
+}
 
 export default Configure;
