@@ -13,6 +13,8 @@ import Posts from './pages/Posts';
 import ThreadAdd from './components/Thread/ThreadAdd';
 import ThreadEdit from './components/Thread/ThreadEdit';
 import PostEdit from './components/Post/PostEdit';
+import ProfileAboutEdit from "./components/Profile/ProfileAboutEdit";
+import ProfileSignatureEdit from "./components/Profile/ProfileSignatureEdit";
 
 function App() {
   const { Header, Content, Footer } = Layout;
@@ -27,6 +29,8 @@ function App() {
             <Routes>
               <Route exact path="/" element={<Forum />} />
               <Route exact path="/user/:username" element={<Profile />} />
+              <Route exact path="/user/:username/edit/about" element={<ProfileAboutEdit />} />
+              <Route exact path="/user/:username/edit/signature" element={<ProfileSignatureEdit />} />
               <Route exact path="/configure" element={<Configure />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />

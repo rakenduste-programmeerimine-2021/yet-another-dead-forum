@@ -10,7 +10,7 @@ const ProfileAbout = ({signature, username}) => {
     const [state, dispatch] = useContext(Context);
 
     return (
-        <Card title="Signature" hoverable>
+        <Card title="Signature" style={{marginBottom:'50px'}}>
         {
             signature
             ?
@@ -21,7 +21,7 @@ const ProfileAbout = ({signature, username}) => {
             {
                 (state.auth.user.roles.includes('ROLE_ADMIN') || state.auth.user.username === username)
                 &&
-                <Button style={{float:'right'}} href={`/user/${username}/edit/about`}>Edit Signature</Button>
+                <Button style={{float:'right'}} href={`/user/${username}/edit/signature`}>Edit Signature</Button>
             }
         </Card>
     )
