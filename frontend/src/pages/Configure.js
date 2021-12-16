@@ -29,6 +29,7 @@ const Configure = () => {
 
   if (!state.auth.token || (state.auth.token && !state.auth.user.roles.includes('ROLE_ADMIN'))) {
     return (
+
       <Navigate to="/"/>
     )
   }
