@@ -18,6 +18,8 @@ A simple, dead forum.
 * React
 * Java (Spring)
 * PostgreSQL
+* Docker
+* Ant Design
 
 ## 🛠 Development
 
@@ -87,3 +89,13 @@ npm start
 * Turn maintenance mode off
 * Change the maintenance mode message
 * Add a global announcement banner with a message
+
+## Media
+
+![](preview/1.png)
+![](preview/2.png)
+![](preview/3.png)
+![](preview/4.png)
+![](preview/5.png)
+![](preview/6.png)
+![](preview/7.png)
