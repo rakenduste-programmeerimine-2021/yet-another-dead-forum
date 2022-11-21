@@ -13,7 +13,7 @@ const Forum = () => {
   const { Text, Title } = Typography;
   
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/threads`).then(res => {
+    fetch(`${process.env.REACT_APP_SITE_URL}/api/threads`).then(res => {
       return res.json();
     }).then(async (data) => {
       await dispatch(updateThreads(data))
@@ -53,7 +53,7 @@ const Forum = () => {
 
   const threadDelete = async (thread) => {
     if (window.confirm("Are you sure you want to deltete the thread\n" + thread.title + "?")) {
-      const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/delete/` + thread.id, {
+      const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/thread/delete/` + thread.id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

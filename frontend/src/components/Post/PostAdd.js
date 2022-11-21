@@ -20,7 +20,7 @@ const PostAdd = () => {
       threadId: params.id
     }
 
-    const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/post/add`, {
+    const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/post/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

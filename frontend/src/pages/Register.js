@@ -17,7 +17,7 @@ function Register() {
       password: values.password
     }
 
-    const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/register`, {
+    const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ function Register() {
         password: values.password
       }
 
-      const response = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/login`, {
+      const response = await fetch(`${process.env.REACT_APP_SITE_URL}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

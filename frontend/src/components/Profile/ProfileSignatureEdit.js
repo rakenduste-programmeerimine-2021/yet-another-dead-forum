@@ -11,7 +11,7 @@ const ProfileSignatureEdit = () => {
     const params = useParams();
 
     useEffect(async () => {
-        const user = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/username/` + params.username).then(res => {
+        const user = await fetch(`${process.env.REACT_APP_SITE_URL}/api/user/username/` + params.username).then(res => {
             return res.json()
         })
         setSignature(user.signature ?? '')
@@ -26,7 +26,7 @@ const ProfileSignatureEdit = () => {
             signature: signature
         }
 
-        const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/edit/signature`, {
+        const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/user/edit/signature`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

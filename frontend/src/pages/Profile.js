@@ -13,7 +13,7 @@ const Profile = () => {
 
     useEffect(async () => {
         try {
-            setProfile(await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/${params.username}/profile`, {
+            setProfile(await fetch(`${process.env.REACT_APP_SITE_URL}/api/user/${params.username}/profile`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

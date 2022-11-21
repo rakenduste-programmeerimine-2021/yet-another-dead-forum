@@ -12,7 +12,7 @@ const PostEdit = () => {
   const params = useParams();  
   
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/post/` + params.id).then(res => {
+    fetch(`${process.env.REACT_APP_SITE_URL}/api/post/` + params.id).then(res => {
       return res.json();
     }).then(async (data) => {
       await dispatch(updateSinglePost(data))
@@ -29,7 +29,7 @@ const PostEdit = () => {
       updatedAt: new Date()
     }
 
-    const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/post/edit`, {
+    const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/post/edit`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ const Configure = () => {
 
   useEffect(async () => {
     try {
-      setUsers(await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/users`, {
+      setUsers(await fetch(`${process.env.REACT_APP_SITE_URL}/api/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

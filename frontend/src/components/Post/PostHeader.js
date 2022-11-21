@@ -17,7 +17,7 @@ const PostHeader = ({data}) => {
 
   const threadDelete = async (data) => {
     if (window.confirm("Are you sure you want to delete the thread\n" + data.title + "?")) {
-      const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/delete/` + data.id, {
+      const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/thread/delete/` + data.id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
