@@ -15,7 +15,7 @@ const PostItem = ({post}) => {
 
   const postDelete = async (data) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
-      const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/post/delete/` + data.id, {
+      const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/post/delete/` + data.id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

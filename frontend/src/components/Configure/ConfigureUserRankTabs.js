@@ -35,7 +35,7 @@ const ConfigureUserRankTabs = () => {
 
   async function fetchUserRoles() {
     try {
-      setUser(await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/username/${params.username}`, {
+      setUser(await fetch(`${process.env.REACT_APP_SITE_URL}/api/user/username/${params.username}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const ConfigureUserRankTabs = () => {
 
   async function fetchAllRoles() {
     try {
-      setAllRoles(await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/roles`, {
+      setAllRoles(await fetch(`${process.env.REACT_APP_SITE_URL}/api/roles`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

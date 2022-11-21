@@ -16,7 +16,7 @@ const ConfigureUserRankAdd = (props) => {
 
   async function tryAddRole() {
     try {
-      await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/role/addtouser`, {
+      await fetch(`${process.env.REACT_APP_SITE_URL}/api/role/addtouser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

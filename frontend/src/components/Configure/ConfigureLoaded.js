@@ -80,7 +80,7 @@ const ConfigureLoaded = (props) => {
 
   async function loadUsers() {
     try {
-      setUsers(await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/users`, {
+      setUsers(await fetch(`${process.env.REACT_APP_SITE_URL}/api/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ const ConfigureLoaded = (props) => {
 
   async function handleDelete(username) {
     if (window.confirm("Are you sure you want to delete the user\n" + username + "?")) {
-      const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/delete/username/` + username, {
+      const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/user/delete/username/` + username, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

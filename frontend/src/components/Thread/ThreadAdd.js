@@ -21,7 +21,7 @@ const ThreadAdd = () => {
       content
     }
 
-    const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/thread/add`, {
+    const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/thread/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

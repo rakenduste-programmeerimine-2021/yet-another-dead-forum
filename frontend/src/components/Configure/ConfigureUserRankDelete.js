@@ -15,7 +15,7 @@ const ConfigureUserRankDelete = (props) => {
 
   async function tryRemoveRole() {
     try {
-      await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/role/deletefromuser`, {
+      await fetch(`${process.env.REACT_APP_SITE_URL}/api/role/deletefromuser`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

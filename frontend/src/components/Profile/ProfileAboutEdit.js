@@ -11,7 +11,7 @@ const ProfileAboutEdit = () => {
     const params = useParams();
 
     useEffect(async () => {
-        const user = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/username/` + params.username).then(res => {
+        const user = await fetch(`${process.env.REACT_APP_SITE_URL}/api/user/username/` + params.username).then(res => {
             return res.json()
         })
         setAbout(user.about)
@@ -26,7 +26,7 @@ const ProfileAboutEdit = () => {
             about: about
         }
 
-        const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/user/edit/about`, {
+        const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/user/edit/about`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

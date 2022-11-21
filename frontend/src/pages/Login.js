@@ -19,7 +19,7 @@ const Login = () => {
       password: password
     }
 
-    const res = await fetch(`${process.env.REACT_APP_SITE_URL}:8080/api/login`, {
+    const res = await fetch(`${process.env.REACT_APP_SITE_URL}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
